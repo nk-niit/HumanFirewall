@@ -1,0 +1,1 @@
+web: gunicorn Firewall.wsgi --log-file -
