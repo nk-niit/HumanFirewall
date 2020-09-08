@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +28,7 @@ SECRET_KEY = 'icsaeliq(@w!j46wuyha7&hnbl*^m6)hxiq_gxjdi_$e!a6)8p'
 DEBUG = True
 #hello ouvais
 
-ALLOWED_HOSTS = ['firewallapp.herokuapp.com']
+ALLOWED_HOSTS = ['firewallapp.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -58,7 +59,7 @@ ROOT_URLCONF = 'Firewall.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(os.path.dirname(__file__), '../templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
