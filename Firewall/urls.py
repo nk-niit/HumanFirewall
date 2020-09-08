@@ -19,6 +19,7 @@ from App import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',views.login, name="login"),
     path('dashboard/',views.dashboard, name="dashboard"),
     path('campaign/',views.campaign, name="campaign"),
     path('usergroups/',views.usergroups,name="usergroups"),

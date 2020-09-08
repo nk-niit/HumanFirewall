@@ -22,3 +22,6 @@ def landingpage(request):
 
 def accountsettings(request):
     return render(request,"accountsettings.html")
+
+def login(request):
+    return render(request,"login.html")
