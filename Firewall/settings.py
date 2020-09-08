@@ -25,6 +25,7 @@ SECRET_KEY = 'icsaeliq(@w!j46wuyha7&hnbl*^m6)hxiq_gxjdi_$e!a6)8p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#hello ouvais
 
 ALLOWED_HOSTS = ['firewallapp.herokuapp.com']
 
