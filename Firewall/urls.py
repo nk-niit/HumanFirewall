@@ -19,6 +19,12 @@ from App import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/',views.dashboard)
+    path('dashboard/',views.dashboard, name="dashboard"),
+    path('campaign/',views.campaign, name="campaign"),
+    path('usergroups/',views.usergroups,name="usergroups"),
+    path('emailtemp/',views.emailtemp,name="emailtemp"),
+    path('sendingprofile/',views.sendingprofile,name="sendingprofile"),
+    path('landingpage/',views.landingpage,name="landingpage"),
+    path('accountsettings/',views.accountsettings,name="accountsettings")
 ]
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -52,13 +52,13 @@
     <div class="bg-light border-right" id="sidebar-wrapper">
       <div class="sidebar-heading">Human Firewall </div>
       <div class="list-group list-group-flush">
-        <a href="#" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Campaign</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Users & Groups</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Email Templates</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Sending Profile</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Landing Page</a>
-        <a href="#" class="list-group-item list-group-item-action bg-light">Account Settings</a>
+        <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
+        <a href="{% url 'campaign' %}" class="list-group-item list-group-item-action bg-light">Campaign</a>
+        <a href="{% url 'usergroups' %}" class="list-group-item list-group-item-action bg-light">Users & Groups</a>
+        <a href="{% url 'emailtemp' %}" class="list-group-item list-group-item-action bg-light">Email Templates</a>
+        <a href="{% url 'sendingprofile' %}" class="list-group-item list-group-item-action bg-light">Sending Profile</a>
+        <a href="{% url 'landingpage' %}" class="list-group-item list-group-item-action bg-light">Landing Page</a>
+        <a href="{% url 'accountsettings' %}" class="list-group-item list-group-item-action bg-light">Account Settings</a>
       </div>
     </div>
     <div id="page-content-wrapper">
@@ -83,16 +83,14 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="#">Settins</a>
                   <a class="dropdown-item" href="#">Log Out</a>
-
-
               </div>
             </li>
           </ul>
         </div>
       </nav>
       <div class="container-fluid">
-        <h1 class="mt-4">Dashboard</h1>
-          <p>This is dashboard.</p></div>
+        {% block content %}
+        {% endblock %}
     </div>
   </div>
   <script>
