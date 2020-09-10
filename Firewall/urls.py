@@ -28,4 +28,3 @@ urlpatterns = [
     path('landingpage/',views.landingpage,name="landingpage"),
     path('accountsettings/',views.accountsettings,name="accountsettings")
 ]
-
