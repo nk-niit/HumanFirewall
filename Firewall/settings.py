@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +27,7 @@ SECRET_KEY = 'icsaeliq(@w!j46wuyha7&hnbl*^m6)hxiq_gxjdi_$e!a6)8p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+#hello ouvais
 
 ALLOWED_HOSTS = ['firewallapp.herokuapp.com','127.0.0.1']
 
@@ -81,6 +84,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+db_from_env=dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
