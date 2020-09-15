@@ -214,13 +214,13 @@
 
 		<div class="row" style="background: white;">
 			<div class="col-3" style="text-align: left">
-				<img src="niit.jpg" height="100px" width="150px">
+
 			</div>
 
 			<div class="col-1"></div>
 
 			<div class="col-3 d-none d-lg-block" style="padding-top: 30px; margin-left: 55px">
-				<h2><strong>VISITOR <span style="color: red;">GATEPASS</span></strong></h2>
+				<h2><strong>HUMAN <span style="color: red;">FIREWALL</span></strong></h2>
 			</div>
 		</div>
 
@@ -228,12 +228,12 @@
 			<div class="col-4 main-section">
 				<div class="modal-content">
 					<div class="col-12 login-image">
-						<img src="gatepass.png">
+
 					</div>
 
 					<div class="col-12 form-input">
 						<form method="post" id="form" action="#">
-							@csrf
+							{{ csrf }}
 							<div class="form-group">
 								<input class="form-control" type="text" id="username" name="username" placeholder="Enter Username" oninput="check_username();" autofocus>
 								<i class="fas fa-check-circle"></i>
