@@ -1,5 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.contrib import messages
+
+
+
 
 # Create your views here.
 def dashboard(request):
@@ -26,5 +33,16 @@ def accountsettings(request):
 def login(request):
     return render(request,"login.html")
 
+def user_check(request):
+    user=request.POST['username']
+    passwd=request.POST['password']
+    authen = authenticate(username=user, password=passwd)
+    print(authen)
+    if authen is not None:
+        return redirect("dashboard")
+    else:
+        return redirect("login")
+
 def logout(request):
-    return render(request, "login.html")
+    logout(request)
+    return redirect("login")
