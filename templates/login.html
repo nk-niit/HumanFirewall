@@ -234,6 +234,11 @@
 					<div class="col-12 form-input">
 						<form method="post" id="form" action="user_check">
 							{% csrf_token %}
+							{% if messages %}
+								{% for message in messages %}
+								{{ message }}
+								{% endfor %}
+							{% endif %}
 							<div class="form-group">
 								<input class="form-control" type="text" id="username" name="username" placeholder="Enter Username" oninput="check_username();" autofocus>
 								<i class="fas fa-check-circle"></i>
