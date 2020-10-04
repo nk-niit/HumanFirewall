@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib import messages
 import datetime
+from App.models import LandingPage
 
 # Create your views here.
 def dashboard(request):
@@ -42,7 +43,12 @@ def sendingprofile(request):
     return render(request,"sendingprofile.html")
 
 def landingpage(request):
-    return render(request,"landingpage.html")
+    if request.method == 'POST':
+        name = request.POST['name']
+        html = request.POST['html']
+        return HttpResponse("Done")
+    else:
+        return render(request,"landingpage.html")
 
 def accountsettings(request):
     return render(request,"accountsettings.html")
