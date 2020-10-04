@@ -31,6 +31,4 @@ urlpatterns = [
     path('sendingprofile',views.sendingprofile,name="sendingprofile"),
     path('landingpage',views.landingpage,name="landingpage"),
     path('accountsettings',views.accountsettings,name="accountsettings"),
-
-
 ]
