@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from django.shortcuts import redirect
 from django.contrib import messages
+from .models import LandingPage
 import datetime
 import sqlite3
 from sqlite3 import Error
@@ -29,6 +30,7 @@ def dashboard(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
 
 def campaign(request):
     if request.session.has_key('id'):
@@ -87,10 +89,19 @@ def sendingprofile(request):
 def landingpage(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        if (request.method == "GET"):
-            return render(request, "landingpage.html")
-        elif (request.method == "POST"):
-            return HttpResponse("Data Gaya")
+        
+        if (request.method == "POST"):
+            obj = LandingPage()
+
+            if request.POST['name'] and request.POST['html']:
+                obj.name = request.POST['name']
+                obj.content = request.POST['html']
+                obj.userId_id = id
+                obj.save()
+                return redirect('/landingpage')
+            return HttpResponse("No Data in fields")
+        
+        return render(request, "landingpage.html")
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
