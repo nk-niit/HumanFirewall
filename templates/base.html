@@ -67,8 +67,8 @@
                 </div>
             </div>
     
-            <div class="content-container">
-                <h1 class="display-4 option">{{ header }}</h1>
+            <div class="header-container">
+                <h1 class="display-4 header">{{ header }}</h1>
                 <div class="btn-group user">
                     <h1 class="display-4">{{ request.session.username }}</h1>
                     <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
@@ -79,10 +79,9 @@
                 </div>
             </div>
 
-            <div class="container">
-                {% block content %}
-                {% endblock %}
-            </div>
+            {% block content %}
+            {% endblock %}
+            
         </div>
         
         <script type="text/javascript" src="{% static 'js/main.js' %}"></script>

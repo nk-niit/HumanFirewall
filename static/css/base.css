@@ -82,8 +82,18 @@ img {
     text-align: start;
     white-space: nowrap;
 }
+.container.content {
+    margin-left: 60px;
+    padding-left: 20px;
+    transition: 0.5s;
+    width: 100%;
+}
 
-#main .content-container {
+#main .navigation:hover ~ .container.content {
+    margin-left: 270px;
+    width: 70%;
+}
+#main .header-container {
     height: 60px;
     margin-left: 60px;
     display: grid;
@@ -91,44 +101,43 @@ img {
     align-items: center;
     transition: 0.5s;
 }
-#main .content-container .btn-group.user {
+#main .header-container .display-4.header {
+    padding-left: 20px;
+    font-size: 40px;
+}
+#main .navigation:hover ~ .header-container {
+    margin-left: 270px;
+}
+#main .header-container .btn-group.user {
     position: absolute;
     right: 30px;
     top: 12px;
     font-size: 25px;
 }
-#main .content-container .btn-group.user .display-4 {
+#main .header-container .btn-group.user .display-4 {
     font-size: 25px;
     margin-right: 5px;
 }
-#main .content-container .btn-group.user .btn {
+#main .header-container .btn-group.user .btn {
     box-shadow: none;
     height: 25px;
 }
-#main .content-container .btn-group.user .btn:hover {
+#main .header-container .btn-group.user .btn:hover {
     box-shadow: none;
     height: 25px;
 }
-#main .content-container .btn-group.user .dropdown-menu.show {
+#main .header-container .btn-group.user .dropdown-menu.show {
     margin-top: 10px;
     min-width: 100%;
     width: 25px;
     text-align: center;
 }
-#main .content-container .btn-group.user .dropdown-menu.show .dropdown-item {
+#main .header-container .btn-group.user .dropdown-menu.show .dropdown-item {
     padding: 0;
     height: 25px;
     font-family: 'Roboto', sans-serif;
 }
-#main .content-container .btn-group.user .dropdown-menu.show .dropdown-item:hover {
+#main .header-container .btn-group.user .dropdown-menu.show .dropdown-item:hover {
     background-color: #0C5DF4;
     color: #fff;
-}
-#main .content-container .display-4.option {
-    padding-left: 20px;
-    font-size: 40px;
-}
-
-#main .navigation:hover ~ .content-container {
-    margin-left: 270px;
 }
