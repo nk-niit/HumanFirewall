@@ -1,103 +1,90 @@
 {% load static %}
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Human Firewall</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
-<style type="text/css">
-#wrapper {
-    overflow-x: hidden;
- }
-#sidebar-wrapper {
-  min-height: 100vh;
-  margin-left: -15rem;
-  -webkit-transition: margin .25s ease-out;
-  -moz-transition: margin .25s ease-out;
-  -o-transition: margin .25s ease-out;
-  transition: margin .25s ease-out;
-}
-#sidebar-wrapper .sidebar-heading {
-  padding: 0.875rem 1.25rem;
-  font-size: 1.2rem;
-}
-#sidebar-wrapper .list-group {
-  width: 15rem;
-}
-#page-content-wrapper {
-  min-width: 100vw;
-}
-#wrapper.toggled #sidebar-wrapper {
-  margin-left: 0;
-}
-@media (min-width: 768px) {
-  #sidebar-wrapper {
-    margin-left: 0;
-  }
-  #page-content-wrapper {
-    min-width: 0;
-    width: 100%;
-  }
-  #wrapper.toggled #sidebar-wrapper {
-    margin-left: -15rem;
-  }
-}
-</style>
-</head>
-<body>
-  <div class="d-flex" id="wrapper">
-    <div class="bg-light border-right" id="sidebar-wrapper">
-      <div class="sidebar-heading">Human Firewall </div>
-      <div class="list-group list-group-flush">
-        <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action bg-light">Dashboard</a>
-        <a href="{% url 'campaign' %}" class="list-group-item list-group-item-action bg-light">Campaign</a>
-        <a href="{% url 'usergroups' %}" class="list-group-item list-group-item-action bg-light">Users & Groups</a>
-        <a href="{% url 'emailtemp' %}" class="list-group-item list-group-item-action bg-light">Email Templates</a>
-        <a href="{% url 'sendingprofile' %}" class="list-group-item list-group-item-action bg-light">Sending Profile</a>
-        <a href="{% url 'landingpage' %}" class="list-group-item list-group-item-action bg-light">Landing Page</a>
-        <a href="{% url 'accountsettings' %}" class="list-group-item list-group-item-action bg-light">Account Settings</a>
-      </div>
-    </div>
-    <div id="page-content-wrapper">
-      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-        <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Human Firewall</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+        <script type="module" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule="" src="https://unpkg.com/ionicons@5.1.2/dist/ionicons/ionicons.js"></script>
+    </head>
+    <body>
+        <div id="main">
+            <div class="navigation">
+                <div class="nav-brand">
+                    <img src="{% static 'images/HF.png' %}">
+                </div>
+                <div class="nav-list">
+                    <ul>
+                        <li>
+                            <a class="options" href="{% url 'dashboard' %}" data-toggle="tooltip" data-placement="right" title="An outlook for everything!">
+                                <span class="span-icon"><ion-icon class="icon" name="create-outline"></ion-icon></span>
+                                <span class="title">Dashboard</span>                    
+                            </a>
+                        </li>
+                        <li>
+                            <a class="options" href="{% url 'campaign' %}" data-toggle="tooltip" data-placement="right" title="Check or start campaigns.">
+                                <span class="span-icon"><ion-icon class="icon" name="analytics-outline"></ion-icon></span>
+                                <span class="title">Campaigns</span>                    
+                            </a>
+                        </li>
+                        <li>
+                            <a class="options" href="{% url 'usergroups' %}" data-toggle="tooltip" data-placement="right" title="Add people and put them in groups.">
+                                <span class="span-icon"><ion-icon class="icon" name="people-outline"></ion-icon></span>
+                                <span class="title">Users & Groups</span>                    
+                            </a>
+                        </li>
+                        <li>
+                            <a class="options" href="{% url 'emailtemp' %}" data-toggle="tooltip" data-placement="right" title="Use templates or create your own fake emails.">
+                                <span class="span-icon"><ion-icon class="icon" name="mail-outline"></ion-icon></span>
+                                <span class="title">Email Templates</span>                    
+                            </a>
+                        </li>
+                        <li>
+                            <a class="options" href="{% url 'sendingprofile' %}" data-toggle="tooltip" data-placement="right" title="Create profiles for sending impersonated emails.">
+                                <span class="span-icon"><ion-icon class="icon" name="send-outline"></ion-icon></span>
+                                <span class="title">Sending Profiles</span>                    
+                            </a>
+                        </li>
+                        <li>
+                            <a class="options" href="{% url 'landingpage' %}" data-toggle="tooltip" data-placement="right" title="Make your own landing page or use built-in templates.">
+                                <span class="span-icon"><ion-icon class="icon" name="download-outline"></ion-icon></span>
+                                <span class="title">Landing Pages</span>                    
+                            </a>
+                        </li>
+                        <li>
+                            <a class="options" href="{% url 'accountsettings' %}" data-toggle="tooltip" data-placement="right" title="Check your settings.">
+                                <span class="span-icon"><ion-icon class="icon" name="settings-outline"></ion-icon></span>
+                                <span class="title">Account Settings</span>                    
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="content-container">
+                <h1 class="display-4 option">{{ header }}</h1>
+                <div class="btn-group user">
+                    <h1 class="display-4">{{ request.session.username }}</h1>
+                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+            
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    </div>
+                </div>
+            </div>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                {{ request.session.username }}
-              </a>
-              <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Settings</a>
-                  <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
-              </div>
-            </li>
-          </ul>
+            <div class="container">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
-      </nav>
-      <div class="container-fluid">
-        {% block content %}
-        {% endblock %}
-    </div>
-    </div>
-  </div>
-</body>
-  <script>
-    $("#menu-toggle").click(function(e) {
-      e.preventDefault();
-      $("#wrapper").toggleClass("toggled");
-    });
-  </script>
+        
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+    </body>
 </html>

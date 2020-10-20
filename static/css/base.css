@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    min-height: 100vh;
+}
+img {
+    border-radius: 50px;
+    border: 2px solid white;
+    width: 45px;
+    height: 45px;
+    transition: 0.5s;
+}
+
+.navigation {
+    position: fixed;
+    font-family: 'Poppins', sans-serif;
+    width: 60px;
+    height: 100%;
+    background: #12192C;
+    transition: 0.5s;
+    overflow: hidden;
+    text-align: center;
+    z-index: 1;
+}
+.navigation:hover {
+    width: 270px;
+}
+.navigation:hover img {
+    width: 80px;
+    height: 80px;
+}
+.nav-brand {
+    margin-top: 20px;
+    align-items: center;
+    transition: 0.5s;
+}
+.navigation ul {
+    position: relative;
+    top: 50px;
+    left: 0;
+    width: 100%;
+}
+.navigation ul li {
+    position: relative;
+    width: 100%;
+    list-style: none;
+}
+.navigation ul li:hover {
+    background: #0C5DF4;
+}
+.navigation ul li a {
+    position: relative;
+    width: 100%;
+    display: flex;
+    text-decoration: none;
+    color: #fff;
+}
+.navigation ul li a .span-icon {
+    position: relative;
+    display: block;
+    min-width: 60px;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+}
+.navigation ul li a .span-icon .icon {
+    font-size: 24px;
+    padding-top: 17px;
+}
+.navigation ul li a .title {
+    position: relative;
+    display: block;
+    padding: 0 10px;
+    height: 60px;
+    line-height: 60px;
+    text-align: start;
+    white-space: nowrap;
+}
+
+#main .content-container {
+    height: 60px;
+    margin-left: 60px;
+    display: grid;
+    background-color: #e9ecef;
+    align-items: center;
+    transition: 0.5s;
+}
+#main .content-container .btn-group.user {
+    position: absolute;
+    right: 30px;
+    top: 12px;
+    font-size: 25px;
+}
+#main .content-container .btn-group.user .display-4 {
+    font-size: 25px;
+    margin-right: 5px;
+}
+#main .content-container .btn-group.user .btn {
+    box-shadow: none;
+    height: 25px;
+}
+#main .content-container .btn-group.user .btn:hover {
+    box-shadow: none;
+    height: 25px;
+}
+#main .content-container .btn-group.user .dropdown-menu.show {
+    margin-top: 10px;
+    min-width: 100%;
+    width: 25px;
+    text-align: center;
+}
+#main .content-container .btn-group.user .dropdown-menu.show .dropdown-item {
+    padding: 0;
+    height: 25px;
+    font-family: 'Roboto', sans-serif;
+}
+#main .content-container .btn-group.user .dropdown-menu.show .dropdown-item:hover {
+    background-color: #0C5DF4;
+    color: #fff;
+}
+#main .content-container .display-4.option {
+    padding-left: 20px;
+    font-size: 40px;
+}
+
+#main .navigation:hover ~ .content-container {
+    margin-left: 270px;
+}
