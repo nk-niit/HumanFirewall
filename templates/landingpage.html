@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
 {% block content %}
-    <div class="container content">
+    <div class="container-fluid content">
         <div class="row">
-            <div class="col-6 form-input">
+            <div class="col-12 text-center">
+                <div class="landing-pages">
+                    <button class="btn add">+&nbsp; Landing Page</button>
+                </div>
+
+
+            <!-- <div class="col-6 form-input">
                 <form id="form" method="POST" action="#">
                     {% csrf_token %}
                     <div class="form-group">
@@ -15,6 +21,7 @@
                     </div>
                     <button class="btn btn-success" type="submit" id="create_page">Create</button>
                 </form>
+            </div> -->
             </div>
         </div>
     </div>

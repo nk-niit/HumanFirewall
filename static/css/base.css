@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 
 * {
     margin: 0;
@@ -16,6 +17,7 @@ img {
     height: 45px;
     transition: 0.5s;
 }
+
 
 .navigation {
     position: fixed;
@@ -82,16 +84,42 @@ img {
     text-align: start;
     white-space: nowrap;
 }
-.container.content {
+.container-fluid.content {
+    margin-top: 50px;
     margin-left: 60px;
-    padding-left: 20px;
+    padding-left: 60px;
+    padding-right: 60px;
     transition: 0.5s;
+    width: 95%;
+}
+.sending-profiles, .landing-pages, .user-groups {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
     width: 100%;
+    height: 500px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
+}
+.container-fluid.content .btn.add {
+    font-family: 'Montserrat';
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    color: #0C5DF4;
+}
+.container-fluid.content .btn.add:hover {
+    color: #fff;
+    background-color: #0C5DF4;
 }
 
-#main .navigation:hover ~ .container.content {
+
+#main .navigation:hover ~ .container-fluid.content {
     margin-left: 270px;
-    width: 70%;
+    width: 80%;
 }
 #main .header-container {
     height: 60px;
