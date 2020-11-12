@@ -1,39 +1,53 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class emailtemp(models.Model):
+
+class EmailTemp(models.Model):
     tempId = models.AutoField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
-    tempName = models.CharField(max_length=5000)
+    tempName = models.CharField(max_length=5000, unique=True)
     subject = models.CharField(max_length=5000)
     text_html = models.TextField()
 
-class campaign(models.Model):
+
+class Campaign(models.Model):
     campId = models.AutoField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
 
-class usergroups(models.Model):
-    usergroupId = models.AutoField(primary_key=True)
-    groupName = models.CharField(max_length=5000)
-    userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
 
-class targets(models.Model):
+class Targets(models.Model):
     id = models.AutoField(primary_key=True)
     firstName=models.CharField(max_length=5000)
     lastName=models.CharField(max_length=5000)
-    email=models.CharField(max_length=5000)
+    email=models.CharField(max_length=5000, unique=True)
     position = models.CharField(max_length=5000)
-    userGroupId = models.ForeignKey(usergroups, on_delete=models.CASCADE, default=None)
+
+
+class UserGroups(models.Model):
+    groupId = models.AutoField(primary_key=True)
+    groupName = models.CharField(max_length=5000, unique=True)
+    totalUsers = models.IntegerField(default=0)
+    users = models.ManyToManyField(Targets, through='GroupedUsers')
+    #userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
+
+
+class GroupedUsers(models.Model):
+    class Meta:
+        unique_together = (('user', 'group'),) 
+    user = models.ForeignKey(Targets, on_delete=models.CASCADE)
+    group = models.ForeignKey(UserGroups, on_delete=models.CASCADE)
+
 
 class LandingPage(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     content = models.TextField()
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
 
+
 class SendingProfile(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, unique=True)
     _from = models.EmailField(max_length=100, db_column='from')
     host = models.GenericIPAddressField(protocol='both', unpack_ipv4=False)
     username = models.CharField(max_length=50)

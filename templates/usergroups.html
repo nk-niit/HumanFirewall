@@ -5,37 +5,87 @@
     <div class="row">
         <div class="col-6 text-center">
             <div class="user-groups">
-                <button class="btn add">+&nbsp; User</button>
+                <div id="user-table" class="user-groups-table">
+                    {% if user_data.values.count > 0 %}
+                        {% for d in user_data.values %}
+                            <div class="user {{ d.id }}">
+                                <div class="user-icon"><ion-icon name="person-circle-sharp"></ion-icon></div>
+                                <div class="user-personal">
+                                    <b class="name">{{ d.firstName }} {{ d.lastName }}</b>
+                                    <i class="email">{{ d.email }}</i>
+                                </div>
+                                <div class="user-position"><p class="position">{{ d.position }}</p></div>
+                                <div class="user-edit-btn"><a class="options" class="edit" href="#" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                                <div class="user-delete-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                            </div>
+                            <hr>
+                        {% endfor %}
+                    {% endif %}
+                    <form id="user-form-new" method="POST" action="/usergroups/adduser" hidden>
+                        {% csrf_token %}
+                    </form>
+                </div>
+                <button class="btn add" onclick="addUser()">+&nbsp; User</button>
             </div>
         </div>
+        
         <div class="col-6 text-center">
-            <div class="user-groups">
-                <button class="btn add">+&nbsp; Group</button>
+          <div class="user-groups">
+            <div id="group-table" class="user-groups-table">
+              {% if group_data.values.count > 0 %}
+                {% for d in group_data.values %}
+                  <div class="group {{ d.groupId }}">
+                    <div class="group-icon i1"><ion-icon name="person-circle-sharp"></ion-icon></div>
+                    <div class="group-icon i2"><ion-icon name="person-circle-sharp"></ion-icon></div>
+                    <div class="group-icon i3"><ion-icon name="person-circle-sharp"></ion-icon></div>
+                    {% if d.totalUsers > 3 %}
+                      <div class="group-user-count"><p class="user-count">+{{ d.totalUsers|add:"-3" }} more</p></div>
+                    {% else %}
+                    <div class="group-user-count"><p class="user-count">+0 more</p></div>
+                    {% endif %}
+                    <div class="group-name">
+                        <b class="name">{{ d.groupName }}</b>
+                    </div>
+                    <div class="group-participants"><p class="participants">{{ d.totalUsers }} people</p></div>
+                    <div class="group-edit-btn"><a class="options" class="edit" href="#" onclick="editGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                    <div class="group-delete-btn"><a class="options" class="delete" href="#" onclick="deleteGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                  </div>
+                  <hr>
+                {% endfor %}
+              {% endif %}
+              <form id="group-form-new" method="POST" action="/usergroups/addgroup" hidden>
+                {% csrf_token %}
+              </form>
             </div>
+            <button class="btn add" onclick="addGroup();">+&nbsp; Group</button>
+          </div>
         </div>
     </div>
 
-    <!-- <p>Here you need to add the target audience. Please add the users you want target and combine them in a group</p>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-    Add User
-  </button>
-    <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
+    
+    <div class="modal fade" id="choose-users" tabindex="-1" role="dialog" aria-labelledby="choose-users-title" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
           <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
+            <h5 class="modal-title" id="choose-users-title">Add Users</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           <div class="modal-body">
-          Modal body..
-        </div>
+            <div class="modal-search">
+              <input id="search" type="text" placeholder="Search..." autofocus>
+            </div>
+            <div id="modal-users" class="content-container"></div>
+            <div id="all-chips" class="chips-container"></div>
+          </div>
           <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">Close</button>
+            <button type="button" class="btn btn-primary" onclick="saveSelectedUsers();">Save</button>
+          </div>
         </div>
-
       </div>
     </div>
-  </div> -->
 
 </div>
 
