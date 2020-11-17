@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class EmailTemp(models.Model):
     tempId = models.AutoField(primary_key=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
-    tempName = models.CharField(max_length=5000, unique=True)
-    subject = models.CharField(max_length=5000)
+    tempName = models.CharField(max_length=50, unique=True)
+    subject = models.CharField(max_length=50)
     text_html = models.TextField()
 
 
@@ -17,15 +17,15 @@ class Campaign(models.Model):
 
 class Targets(models.Model):
     id = models.AutoField(primary_key=True)
-    firstName=models.CharField(max_length=5000)
-    lastName=models.CharField(max_length=5000)
-    email=models.CharField(max_length=5000, unique=True)
-    position = models.CharField(max_length=5000)
+    firstName=models.CharField(max_length=50)
+    lastName=models.CharField(max_length=50)
+    email=models.CharField(max_length=100, unique=True)
+    position = models.CharField(max_length=50)
 
 
 class UserGroups(models.Model):
     groupId = models.AutoField(primary_key=True)
-    groupName = models.CharField(max_length=5000, unique=True)
+    groupName = models.CharField(max_length=50, unique=True)
     totalUsers = models.IntegerField(default=0)
     users = models.ManyToManyField(Targets, through='GroupedUsers')
     #userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
@@ -47,7 +47,7 @@ class LandingPage(models.Model):
 
 class SendingProfile(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     _from = models.EmailField(max_length=100, db_column='from')
     host = models.GenericIPAddressField(protocol='both', unpack_ipv4=False)
     username = models.CharField(max_length=50)

@@ -60,11 +60,12 @@ def addGroup(request):
             obj1.save()
             record = UserGroups.objects.get(groupName=request.POST['groupname'])
             all_users = request.POST['users']
-            for u in all_users.split(","):
-                obj2 = GroupedUsers()
-                obj2.group_id = record.groupId
-                obj2.user_id = int(u)
-                obj2.save()
+            if all_users != "":
+                for u in all_users.split(","):
+                    obj2 = GroupedUsers()
+                    obj2.group_id = record.groupId
+                    obj2.user_id = int(u)
+                    obj2.save()
             return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
         return redirect("/usergroups")
 
@@ -176,7 +177,7 @@ def deleteGroup(request):
             queryset = GroupedUsers.objects.filter(group=request.POST['gid'])
             if queryset.exists():
                 queryset.delete()
-                UserGroups.objects.get(groupId=request.POST['gid']).delete()
+            UserGroups.objects.get(groupId=request.POST['gid']).delete()
             return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
         return redirect("/usergroups")
 

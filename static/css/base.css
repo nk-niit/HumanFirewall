@@ -92,7 +92,7 @@ img {
     transition: 0.5s;
     width: 95%;
 }
-.sending-profiles, .landing-pages, .user-groups {
+.sending-profiles, .landing-pages, .user-groups, .email-templates {
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -234,7 +234,7 @@ img {
     top: 35%;
     vertical-align: middle;
     margin-left: 5px;
-    width: 25%;
+    width: 15%;
     bottom: 0;
     overflow: hidden;
     z-index: 3;
@@ -274,11 +274,11 @@ img {
 }
 .user-groups-table .group .group-participants, .user-groups-table .group-input .group-participants {
     position: absolute;
-    right: 9%;
+    right: 19%;
     top: 35%;
     vertical-align: middle;
     margin-left: 5px;
-    width: 25%;
+    width: 15%;
     bottom: 0;
     overflow: hidden;
 }
@@ -288,6 +288,18 @@ img {
     font-style: italic;
     font-family: 'Roboto', sans-serif;
     white-space: nowrap;
+    width: fit-content;
+}
+.user-groups-table .group .group-participants .btn {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fff;
+    color: #0C5DF4;
+    border: 1px solid #0C5DF4;
+    font-size: 12px;
+    padding: 5px;
+    height: fit-content;
+    width: 80%;
+    transition: 0.5s;
 }
 .user-groups-table .group-input .btn.btn-primary {
     position: absolute;
