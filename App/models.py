@@ -23,13 +23,13 @@ class Targets(models.Model):
     position = models.CharField(max_length=50)
 
 
+
 class UserGroups(models.Model):
     groupId = models.AutoField(primary_key=True)
     groupName = models.CharField(max_length=50, unique=True)
     totalUsers = models.IntegerField(default=0)
     users = models.ManyToManyField(Targets, through='GroupedUsers')
     #userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
-
 
 class GroupedUsers(models.Model):
     class Meta:
