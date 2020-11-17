@@ -272,9 +272,6 @@ function deleteUser(element) {
         new_element.submit();
         new_element.remove();
     }
-    else {
-        alert("Some error occurred. Please try again.");
-    }
 }
 
 function deleteGroup(element) {
@@ -290,9 +287,6 @@ function deleteGroup(element) {
         document.getElementById('user-table').appendChild(new_element);
         new_element.submit();
         new_element.remove();
-    }
-    else {
-        alert("Some error occurred. Please try again.");
     }
 }
 
@@ -312,7 +306,7 @@ function submitAddUserForm() {
     }
 }
 
-async function submitAddGroupForm() {
+function submitAddGroupForm() {
     const form = document.getElementById('group-form-new');
     const element1 = document.createElement("input");
     const element2 = document.createElement("input");
@@ -322,11 +316,22 @@ async function submitAddGroupForm() {
     element2.name = "totalusers";
     element2.value = selected_userlist.length;
     element2.hidden = true;
-    form.appendChild(element1);
-    form.appendChild(element2);
-    form.submit();
-    $('#group-form-new .group-input').remove();
-    form.hidden = true;
+    const groupname = $('#new-groupname').val();
+    if (groupname != "" && selected_userlist.length > 0) {
+        form.appendChild(element1);
+        form.appendChild(element2);
+        form.submit();
+        $('#group-form-new .group-input').remove();
+        form.hidden = true;
+    }
+    else if (groupname == "" && selected_userlist.length >= 0) {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("No users have been added to this group. Please add users to confirm.");
+    }
 }
 
 function submitEditUserForm() {
