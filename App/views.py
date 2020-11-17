@@ -3,13 +3,33 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers
+from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp
 import json
+from PIL import Image
+from django.core.mail import get_connection, send_mail
+from django.core.mail import EmailMultiAlternatives
 
 
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
+        my_host = 'smtp.gmail.com'
+        my_port = 587
+        my_username = 'firewallonhuman@gmail.com'
+        my_password = 'humanfirewall@on'
+        my_use_tls = True
+        connection = get_connection(host=my_host,
+                                    port=my_port,
+                                    username=my_username,
+                                    password=my_password,
+                                    use_tls=my_use_tls)
+        subject, from_email, to = 'Now image test', my_username, 'ouvaisaifi@gmail.com'
+        text_content = 'This is very important.'
+        html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://127.0.0.1:8000/image_load/12" height="0px" width="0px" />'
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+        print("sned")
         return render(request, "dashboard.html", context={ "header": "Dashboard" })
     else:
         messages.info(request, 'Kindly Login To Continue')
@@ -19,11 +39,23 @@ def dashboard(request):
 def campaign(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "campaign.html", context={ "header": "Campaigns" })
+        objEmail = EmailTemp()
+        objLand = LandingPage()
+        objSend = SendingProfile()
+        if (request.method == "GET"):
+            return render(request, "campaign.html", context={"emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.all() })
+        elif (request.method == "POST"):
+            campname = request.POST['campname']
+            emailtempa = request.POST['emailtemp']
+            #landpage = request.POST['landpage']
+            #sendprofile = request.POST['sendprofile']
+            group = request.POST['group']
+            print(campname+ emailtempa + group)
+
+            return render(request, "dashboard.html", context={"header": "Dashboard"})
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
-
 
 def usergroups(request):
     if request.session.has_key('id'):
@@ -32,7 +64,6 @@ def usergroups(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
-
 
 def addUser(request):
     if request.session.has_key('id'):
@@ -187,10 +218,13 @@ def emailtemp(request):
         if (request.method=="GET"):
             return render(request, "emailtemp.html", context = { "header": "Email Templates" })
         elif(request.method=="POST"):
-            tempname=request.POST['tempname']
-            subject = request.POST['subject']
-            emailtext = request.POST['emailtext']
-            return HttpResponse(tempname + subject + emailtext)
+            obj = EmailTemp()
+            obj.tempName=request.POST['tempname']
+            obj.subject = request.POST['subject']
+            obj.text_html = request.POST['emailtext']
+            obj.userId_id = id
+            obj.save()
+            return redirect('/emailtemp')
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -281,3 +315,26 @@ def logoutfunc(request):
     logout(request)
     messages.info(request, 'LOG OUT')
     return redirect("login")
+
+def image_load(request,id=0):
+    print("\nImage Loaded\n")
+    print(id)
+    red = Image.new('RGB', (1, 1))
+    response = HttpResponse(content_type="image/png")
+    red.save(response, "PNG")
+    return response
+#<img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />
+
+def email_send():
+    my_host = 'smtp.gmail.com:587'
+    my_port = 587
+    my_username = 'firewallonhuman@gmail.com'
+    my_password = 'humanfirewall@on'
+    my_use_tls = True
+    connection = get_connection(host=my_host,
+                                port=my_port,
+                                username=my_username,
+                                password=my_password,
+                                use_tls=my_use_tls)
+    send_mail('diditwork?', 'test message', 'firewallonhuman@gmail.com', ['ouvaisaifi@gmail.com'], connection=connection)
+
