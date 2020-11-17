@@ -25,7 +25,7 @@ def dashboard(request):
                                     use_tls=my_use_tls)
         subject, from_email, to = 'Now image test', my_username, 'ouvaisaifi@gmail.com'
         text_content = 'This is very important.'
-        html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://127.0.0.1:8000/image_load/12" height="0px" width="0px" />'
+        html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />'
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
         msg.attach_alternative(html_content, "text/html")
         msg.send()
