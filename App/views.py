@@ -23,9 +23,9 @@ def dashboard(request):
                                     username=my_username,
                                     password=my_password,
                                     use_tls=my_use_tls)
-        subject, from_email, to = 'Now image test 12 12', my_username, 'ouvaisaifi@gmail.com'
-        text_content = 'This is very important.'
-        html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />'
+        subject, from_email, to = 'Now image test 12 12', my_username, 'saifiouvais@gmail.com'
+        text_content = 'This is very importantasd.'
+        html_content = '<p>This is <strong>very</strong> messageasd.</p> <img src = "http://firewallapp.herokuapp.com/image_load/13" height="0px" width="0px" />'
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
         msg.attach_alternative(html_content, "text/html")
         msg.send()
