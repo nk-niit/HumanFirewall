@@ -13,22 +13,22 @@ from django.core.mail import EmailMultiAlternatives
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        # my_host = 'smtp.gmail.com'
-        # my_port = 587
-        # my_username = 'firewallonhuman@gmail.com'
-        # my_password = 'humanfirewall@on'
-        # my_use_tls = True
-        # connection = get_connection(host=my_host,
-        #                             port=my_port,
-        #                             username=my_username,
-        #                             password=my_password,
-        #                             use_tls=my_use_tls)
-        # subject, from_email, to = 'Now image test', my_username, 'ouvaisaifi@gmail.com'
-        # text_content = 'This is very important.'
-        # html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />'
-        # msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
-        # msg.attach_alternative(html_content, "text/html")
-        # msg.send()
+        my_host = 'smtp.gmail.com'
+        my_port = 587
+        my_username = 'firewallonhuman@gmail.com'
+        my_password = 'humanfirewall@on'
+        my_use_tls = True
+        connection = get_connection(host=my_host,
+                                    port=my_port,
+                                    username=my_username,
+                                    password=my_password,
+                                    use_tls=my_use_tls)
+        subject, from_email, to = 'Now image test 12 12', my_username, 'ouvaisaifi@gmail.com'
+        text_content = 'This is very important.'
+        html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />'
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
         return render(request, "dashboard.html", context={ "header": "Dashboard" })
     else:
         messages.info(request, 'Kindly Login To Continue')
