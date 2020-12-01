@@ -50,7 +50,6 @@ def campaign(request):
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
 
-
 def usergroups(request):
     if request.session.has_key('id'):
         id = request.session['id']
@@ -58,7 +57,6 @@ def usergroups(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
-
 
 def addUser(request):
     if request.session.has_key('id'):
