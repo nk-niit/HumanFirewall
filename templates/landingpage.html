@@ -1,27 +1,24 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
     <div class="container-fluid content">
         <div class="row">
             <div class="col-12 text-center">
                 <div class="landing-pages">
-                    <button class="btn add">+&nbsp; Landing Page</button>
+                    <div id="pages-table" class="pages-table">
+                        <div class="page 1">
+                            <div class="page-name"><b class="name">Facebook</b></div>
+                            <div class="page-preview-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Preview"><ion-icon name="scan-outline"></ion-icon></a></div>
+                            <div class="page-edit-btn"><a class="options" class="edit" href="#" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                            <div class="page-delete-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                            <div class="page-preview"><iframe class="preview" loading="lazy" src="{% static 'landingpages/test.html' %}"></iframe></div>
+                        </div>
+                        <form id="page-form-new" method="POST" action="/landingpage/addpage" hidden>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <button class="btn add" onclick="addPage();">+&nbsp; Landing Page</button>
                 </div>
-
-
-            <!-- <div class="col-6 form-input">
-                <form id="form" method="POST" action="#">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input class="form-control" type="text" id="name" name="name" placeholder="Page name">
-                    </div>
-                    <div class="form-group">
-                        <label for="html">HTML</label>
-                        <textarea class="form-control" id="html" name="html" placeholder="Your HTML code" rows="6"></textarea>
-                    </div>
-                    <button class="btn btn-success" type="submit" id="create_page">Create</button>
-                </form>
-            </div> -->
             </div>
         </div>
     </div>

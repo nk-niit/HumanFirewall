@@ -3,14 +3,33 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, logout
 from django.contrib import messages
 from django.contrib.auth.models import User
-from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers
+from django.core.mail import get_connection, send_mail
+from django.core.mail import EmailMultiAlternatives
+from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp
+from PIL import Image
 import json
 
 
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "dashboard.html", context={ "header": "Dashboard" })
+        # my_host = 'smtp.gmail.com'
+        # my_port = 587
+        # my_username = 'firewallonhuman@gmail.com'
+        # my_password = 'humanfirewall@on'
+        # my_use_tls = True
+        # connection = get_connection(host=my_host,
+        #                             port=my_port,
+        #                             username=my_username,
+        #                             password=my_password,
+        #                             use_tls=my_use_tls)
+        # subject, from_email, to = 'Now image test', my_username, 'ouvaisaifi@gmail.com'
+        # text_content = 'This is very important.'
+        # html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />'
+        # msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
+        # msg.attach_alternative(html_content, "text/html")
+        # msg.send()
+        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard" })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -19,7 +38,14 @@ def dashboard(request):
 def campaign(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "campaign.html", context={ "header": "Campaigns" })
+        if (request.method == "POST"):
+            campaign_name = request.POST['campname']
+            email_template = request.POST['emailtemp']
+            landing_page = request.POST['landpage']
+            sending_profile = request.POST['sendprofile']
+            group = request.POST['group']
+            return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
+        return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -28,7 +54,7 @@ def campaign(request):
 def usergroups(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+        return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -45,8 +71,9 @@ def addUser(request):
             obj.lastName = fullname_list[1]
             obj.email = request.POST['email']
             obj.position = request.POST['position']
+            obj.userId_id = id
             obj.save()
-            return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+            return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
 
 
@@ -57,6 +84,7 @@ def addGroup(request):
             obj1 = UserGroups()
             obj1.groupName = request.POST['groupname']
             obj1.totalUsers = int(request.POST['totalusers'])
+            obj1.userId_id = id
             obj1.save()
             record = UserGroups.objects.get(groupName=request.POST['groupname'])
             all_users = request.POST['users']
@@ -66,7 +94,7 @@ def addGroup(request):
                     obj2.group_id = record.groupId
                     obj2.user_id = int(u)
                     obj2.save()
-            return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+            return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
 
 
@@ -82,8 +110,9 @@ def editUser(request):
                 record.firstName = fullname_list[0]
                 record.lastName = fullname_list[1]
                 record.position = request.POST['position']
+                record.userId_id = id
                 record.save()
-                return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+                return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
             else:
                 addUser(request)
         return redirect("/usergroups")
@@ -116,8 +145,9 @@ def editGroup(request):
                     obj.save()
                 record.totalUsers = request.POST['totalusers']
             record.groupName = request.POST['groupname']
+            record.userId_id = id
             record.save()
-            return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+            return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
 
 
@@ -133,7 +163,7 @@ def modUsersTable(table):
 def getUsersA(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        users_table = Targets.objects.all()
+        users_table = Targets.objects.filter(userId=id)
         mod_users = modUsersTable(users_table)
         return HttpResponse(json.dumps(mod_users))
 
@@ -148,7 +178,7 @@ def getCurrentUsers(qset):
 def getUsersE(request, gid):
     if request.session.has_key('id'):
         id = request.session['id']
-        users_table = Targets.objects.all()
+        users_table = Targets.objects.filter(userId=id)
         mod_users = modUsersTable(users_table)
         queryset = GroupedUsers.objects.filter(group=gid)
         if queryset.exists():
@@ -166,7 +196,7 @@ def deleteUser(request):
             if queryset.exists():
                 record = Targets.objects.get(email=request.POST['email'])
                 record.delete()
-            return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+            return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
 
 
@@ -178,7 +208,7 @@ def deleteGroup(request):
             if queryset.exists():
                 queryset.delete()
             UserGroups.objects.get(groupId=request.POST['gid']).delete()
-            return render(request, "usergroups.html", context={ "header": "Users & Groups", "user_data": Targets.objects.all(), "group_data": UserGroups.objects.all() })
+            return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
 
 
@@ -186,12 +216,15 @@ def emailtemp(request):
     if request.session.has_key('id'):
         id = request.session['id']
         if (request.method=="GET"):
-            return render(request, "emailtemp.html", context = { "header": "Email Templates" })
+            return render(request, "emailtemp.html", context = { "title": "Email Templates - Human Firewall", "header": "Email Templates" })
         elif(request.method=="POST"):
-            tempname=request.POST['tempname']
-            subject = request.POST['subject']
-            emailtext = request.POST['emailtext']
-            return HttpResponse(tempname + subject + emailtext)
+            obj = EmailTemp()
+            obj.tempName=request.POST['tempname']
+            obj.subject = request.POST['subject']
+            obj.text_html = request.POST['emailtext']
+            obj.userId_id = id
+            obj.save()
+            return redirect('/emailtemp')
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -219,7 +252,7 @@ def sendingprofile(request):
                 return redirect('/sendingprofile')
             else:
                 return HttpResponse("Data missing in fields.")
-        return render(request, "sendingprofile.html", context = { "header": "Sending Profiles" })
+        return render(request, "sendingprofile.html", context = { "title": "Sending Profiles - Human Firewall", "header": "Sending Profiles" })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -237,7 +270,7 @@ def landingpage(request):
                 obj.save()
                 return redirect('/landingpage')
             return HttpResponse("No Data in fields")        
-        return render(request, "landingpage.html", context = { "header": "Landing Pages" })
+        return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages" })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -247,7 +280,7 @@ def accountsettings(request):
     if request.session.has_key('id'):
         id = request.session['id']
         if (request.method == "GET"):
-            return render(request, "accountsettings.html", context = { "header": "Account Settings" })
+            return render(request, "accountsettings.html", context = { "title": "Account Settings - Human Firewall", "header": "Account Settings" })
         elif (request.method == "POST"):
             return HttpResponse("Data Gaya")
     else:
@@ -282,3 +315,28 @@ def logoutfunc(request):
     logout(request)
     messages.info(request, 'LOG OUT')
     return redirect("login")
+
+
+def image_load(request,id=0):
+    print("\nImage Loaded\n")
+    print(id)
+    red = Image.new('RGB', (1, 1))
+    response = HttpResponse(content_type="image/png")
+    red.save(response, "PNG")
+    return response
+#<img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />
+
+
+def email_send():
+    my_host = 'smtp.gmail.com:587'
+    my_port = 587
+    my_username = 'firewallonhuman@gmail.com'
+    my_password = 'humanfirewall@on'
+    my_use_tls = True
+    connection = get_connection(host=my_host,
+                                port=my_port,
+                                username=my_username,
+                                password=my_password,
+                                use_tls=my_use_tls)
+    send_mail('diditwork?', 'test message', 'firewallonhuman@gmail.com', ['ouvaisaifi@gmail.com'], connection=connection)
+

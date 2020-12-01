@@ -428,3 +428,30 @@ function cancelEditGroupForm(id, usercount, name, participants) {
     $('.options').tooltip({ delay: { show: 200, hide: 0 } });
 }
 // Users & Groups (End) ============================================================================================================
+
+
+
+// Landing Pages (Start) ===========================================================================================================
+function addPage() {
+    if ($('#page-form-new .page-input').length == 0) {
+        const form = document.getElementById('page-form-new');
+        form.hidden = false;
+        form.innerHTML += `<div class="page-input">
+                                <div class="page-name form-group"><input type="text" id="new-name" class="name form-control" name="pagename" placeholder="Page Name" required/></div>
+                                <button type="button" class="btn btn-primary" onclick="showHTMLModal();">Add HTML</button>
+                                <div class="page-confirm-btn"><a class="options" href='#' onclick="submitAddPageForm();"><ion-icon name="checkmark-outline"></ion-icon>&nbsp;Confirm</a></div>
+                                <div class="page-cancel-btn"><a class="options" href="#" onclick="cancelAddPageForm();"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</a></div>
+                            </div>`;
+        $('.options').tooltip({ delay: { show: 200, hide: 0 } });
+        $('#new-name').focus();
+    }
+    else {
+        $('#new-name').focus();
+    }
+}
+
+function showHTMLModal() {
+    
+}
+
+// Landing Pages (End) =============================================================================================================

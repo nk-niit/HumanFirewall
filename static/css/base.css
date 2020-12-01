@@ -123,7 +123,16 @@ img {
     overflow-y: auto;
     overflow-x: hidden;
 }
-.user-groups .user-groups-table .user, .user-input {
+.landing-pages .pages-table {
+    padding: 15px 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-column-gap: 10px;
+    grid-row-gap: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.user-groups .user-groups-table .user, .user-groups .user-groups-table .user-input {
     display: flex;
     position: relative;
     width: 95%;
@@ -131,7 +140,7 @@ img {
     text-align: left;
     margin: 10px auto;
 }
-.user-groups .user-groups-table .group {
+.user-groups .user-groups-table .group, .user-groups .user-groups-table .group-input {
     display: flex;
     position: relative;
     width: 95%;
@@ -139,13 +148,14 @@ img {
     text-align: left;
     margin: 10px auto;
 }
-.user-groups .user-groups-table .group-input {
+.landing-pages .pages-table .page, .landing-pages .pages-table .page-input {
     display: flex;
     position: relative;
-    width: 95%;
-    height: 60px;
+    width: 100%;
+    height: 100px;
     text-align: left;
     margin: 10px auto;
+    border-right: 1px solid rgba(0,0,0,.1);
 }
 .user-groups-table .user .user-icon {
     line-height: 70px;
@@ -260,7 +270,31 @@ img {
     bottom: 0;
     overflow: hidden;
 }
+.pages-table .page .page-name {
+    position: absolute;
+    left: 5%;
+    top: 20%;
+    vertical-align: middle;
+    width: 40%;
+    text-align: center;
+    overflow: hidden;
+}
+.pages-table .page-input .page-name {
+    position: absolute;
+    left: 5%;
+    top: 10%;
+    vertical-align: middle;
+    width: 55%;
+    text-align: center;
+    overflow: hidden;
+}
 .user-groups-table .group .group-name .name {
+    line-height: normal;
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
+    white-space: nowrap;
+}
+.pages-table .page .page-name .name {
     line-height: normal;
     font-size: 17px;
     font-family: 'Roboto', sans-serif;
@@ -309,6 +343,14 @@ img {
     padding: 6px 5px;
     width: fit-content;
 }
+.pages-table .page-input .btn.btn-primary {
+    position: absolute;
+    font-family: 'Montserrat', sans-serif;
+    right: 5%;
+    top: 10%;
+    padding: 6px 5px;
+    width: fit-content;
+}
 .user-groups-table .group .group-edit-btn {
     top: 5%;
     font-size: 20px;
@@ -342,6 +384,27 @@ img {
     font-family: 'Roboto', sans-serif;
     white-space: nowrap;
 }
+.pages-table .page .page-preview {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 130px;
+    height: 80px;
+    vertical-align: middle;
+}
+.pages-table .page .page-preview .preview {
+    width: fit-content;
+    height: fit-content;
+    border: none;
+    border-radius: 20px;
+    -webkit-transform:scale(0.5);
+    -moz-transform-scale: (0.5);
+    -moz-transform-origin: top left; 
+    -webkit-transform-origin: top left; 
+    -o-transform-origin: top left; 
+    -ms-transform-origin: top left; 
+    transform-origin: top left;
+}
 .user-groups-table .user .user-edit-btn {
     top: 5%;
     font-size: 20px;
@@ -360,6 +423,27 @@ img {
     vertical-align: middle;
     bottom: 0;
 }
+.pages-table .page .page-preview-btn {
+    position: absolute;
+    bottom: 15%;
+    font-size: 20px;
+    left: 10%;
+    vertical-align: middle;
+}
+.pages-table .page .page-edit-btn {
+    position: absolute;
+    bottom: 15%;
+    font-size: 20px;
+    left: 22%;
+    vertical-align: middle;
+}
+.pages-table .page .page-delete-btn {
+    position: absolute;
+    bottom: 15%;
+    font-size: 20px;
+    left: 34%;
+    vertical-align: middle;
+}
 .user-groups-table .user-input .user-cancel-btn, .user-groups-table .group-input .group-cancel-btn {
     top: 5%;
     font-size: 25px;
@@ -368,6 +452,18 @@ img {
     line-height: 60px;
     vertical-align: middle;
     bottom: 0;
+}
+.pages-table .page-input .page-cancel-btn {
+    bottom: 5%;
+    font-size: 15px;
+    width: 85px;
+    position: absolute;
+    left: 35%;
+    vertical-align: middle;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #0C5DF4;
 }
 .user-groups-table .user-input .user-confirm-btn, .user-groups-table .group-input .group-confirm-btn {
     top: 5%;
@@ -378,11 +474,29 @@ img {
     vertical-align: middle;
     bottom: 0;
 }
+.pages-table .page-input .page-confirm-btn {
+    bottom: 5%;
+    font-size: 15px;
+    width: 85px;
+    position: absolute;
+    left: 5%;
+    vertical-align: middle;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #0C5DF4;
+}
+.pages-table .page-input .page-confirm-btn .options ion-icon {
+    font-size: 15px;
+}
 .user-groups-table .user-input .user-cancel-btn .options, .user-groups-table .group-input .group-cancel-btn .options {
     color: red;
 }
 .user-groups-table .user-input .user-confirm-btn .options, .user-groups-table .group-input .group-confirm-btn .options {
     color: green;
+}
+.pages-table .page-input .page-confirm-btn .options, .pages-table .page-input .page-cancel-btn .options {
+    text-decoration: none;
 }
 .modal-content {
     height: 550px;

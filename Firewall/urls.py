@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from App import views
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,4 +40,6 @@ urlpatterns = [
     path('sendingprofile',views.sendingprofile,name="sendingprofile"),
     path('landingpage',views.landingpage,name="landingpage"),
     path('accountsettings',views.accountsettings,name="accountsettings"),
+    url(r'^image_load/(?P<id>[0-9]+)/$', views.image_load, name='image_load'),
+
 ]
