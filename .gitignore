@@ -1,2 +1,8 @@
+# Ignore .gitignore itself.
+.gitignore
+
+# Ignoring unwanted Mac OS file.
+.DS_Store
+
 # Ignoring the Landing pages that are created.
 static/landingpages/
