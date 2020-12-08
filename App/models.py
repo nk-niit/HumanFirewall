@@ -35,7 +35,7 @@ class CampaignResults(TimeStampMixin):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     user = models.ForeignKey(Targets, on_delete=models.CASCADE)
     userClickStatus = models.BooleanField()
-
+    image_id = models.CharField(max_length=50, unique=True)
 
 class UserGroups(TimeStampMixin):
     groupId = models.AutoField(primary_key=True)

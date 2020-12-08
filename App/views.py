@@ -13,26 +13,34 @@ import json, uuid, os
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        # my_host = 'smtp.gmail.com'
-        # my_port = 587
-        # my_username = 'firewallonhuman@gmail.com'
-        # my_password = 'humanfirewall@on'
-        # my_use_tls = True
-        # connection = get_connection(host=my_host,
-        #                             port=my_port,
-        #                             username=my_username,
-        #                             password=my_password,
-        #                             use_tls=my_use_tls)
-        # subject, from_email, to = 'Now image test', my_username, 'ouvaisaifi@gmail.com'
-        # text_content = 'This is very important.'
-        # html_content = '<p>This is <strong>very</strong> message.</p> <img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />'
-        # msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
-        # msg.attach_alternative(html_content, "text/html")
-        # msg.send()
         return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard" })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
+def runcampaign(targets,sendprofile,emaildata):
+    my_host = sendprofile[1].split(':')[0]
+    my_port = int(sendprofile[1].split(':')[1])
+    my_username = sendprofile[2]
+    my_password = sendprofile[3]
+    my_use_tls = True
+    connection = get_connection(host=my_host,
+                                port=my_port,
+                                username=my_username,
+                                password=my_password,
+                                use_tls=my_use_tls)
+    for i in targets:
+        subject, from_email, to = emaildata[0], sendprofile[0], i
+        text_content = 'Random'
+        randomise = uuid.uuid4().hex
+        imageurl = '<img src = "http://firewallapp.herokuapp.com/image_load/'+randomise+'" width="0px" height="0px"/>'
+        splitbodypart = emaildata[1].split('</body>')
+        bodypart = splitbodypart[0]+imageurl+"</body>"+splitbodypart[1]
+        print(bodypart)
+        #msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
+        #msg.attach_alternative(bodypart, "text/html")
+        #msg.send()
+
 
 
 def campaign(request):
@@ -44,12 +52,29 @@ def campaign(request):
             landing_page = request.POST['landpage']
             sending_profile = request.POST['sendprofile']
             group = request.POST['group']
+            objug = UserGroups.objects.get(groupName=group)
+            objgu = GroupedUsers.objects.filter(group_id=objug.groupId)
+            targetsemail = []
+            for i in objgu:
+                objt = Targets.objects.get(id=i.user_id)
+                targetsemail.append(objt.email)
+
+            objs = SendingProfile.objects.get(name = sending_profile)
+            profile = [objs._from,objs.host,objs.username,objs.password]
+
+            obje = EmailTemp.objects.get(tempName = email_template)
+            emaildata = [obje.subject,obje.text_html]
+
+            runcampaign(targetsemail,profile,emaildata)
+
+
+
+
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
         return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
-
 
 def usergroups(request):
     if request.session.has_key('id'):
@@ -428,26 +453,10 @@ def logoutfunc(request):
     return redirect("login")
 
 
-def image_load(request,id=0):
+def image_load(request,iid):
     print("\nImage Loaded\n")
-    print(id)
+    print(iid)
     red = Image.new('RGB', (1, 1))
     response = HttpResponse(content_type="image/png")
     red.save(response, "PNG")
     return response
-#<img src = "http://firewallapp.herokuapp.com/image_load/12" height="0px" width="0px" />
-
-
-def email_send():
-    my_host = 'smtp.gmail.com:587'
-    my_port = 587
-    my_username = 'firewallonhuman@gmail.com'
-    my_password = 'humanfirewall@on'
-    my_use_tls = True
-    connection = get_connection(host=my_host,
-                                port=my_port,
-                                username=my_username,
-                                password=my_password,
-                                use_tls=my_use_tls)
-    send_mail('diditwork?', 'test message', 'firewallonhuman@gmail.com', ['ouvaisaifi@gmail.com'], connection=connection)
-
