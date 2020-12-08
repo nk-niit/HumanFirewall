@@ -44,6 +44,7 @@ def runcampaign(targets,sendprofile,emaildata, campname):
         objcampresult.campaignId = campn.campId
         objcampresult.user_Id = key
         objcampresult.image_id = randomise
+        objcampresult.save()
 
 def campaign(request):
     if request.session.has_key('id'):
