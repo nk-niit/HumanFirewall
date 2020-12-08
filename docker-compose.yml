@@ -16,9 +16,9 @@ services:
     volumes:
       - db_volume:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=human_firewall
+      - POSTGRES_DB=humanfirewall
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD="welcome@hf"
+      - POSTGRES_PASSWORD=admin
 
 volumes:
   db_volume:

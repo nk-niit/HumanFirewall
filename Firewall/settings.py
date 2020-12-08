@@ -84,9 +84,9 @@ WSGI_APPLICATION = 'Firewall.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'human_firewall',
+        'NAME': 'humanfirewall',
         'USER': 'postgres',
-        'PASSWORD': 'welcome@hf',
+        'PASSWORD': 'admin',
         'HOST': 'db',
         'PORT': 5432
     }
