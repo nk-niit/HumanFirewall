@@ -12,7 +12,6 @@ import json, uuid, os
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-
         return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard","data": CampaignResults.objects.all() })
     else:
         messages.info(request, 'Kindly Login To Continue')
@@ -40,7 +39,7 @@ def runcampaign(targets,sendprofile,emaildata, campname):
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
         msg.attach_alternative(bodypart, "text/html")
         msg.send()
-        campn = Campaign.objects.get(campName=campname)
+        campn = Campaign.objects.get(campaignName=campname)
         objcampresult = CampaignResults()
         objcampresult.campaignId = campn.campId
         objcampresult.user_Id = key
