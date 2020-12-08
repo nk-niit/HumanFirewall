@@ -1,4 +1,5 @@
 var selected_userlist = [], users_dictlist, initial_selected_userlist = [];
+var html_content;
 
 
 $(document).ready(function() {
@@ -18,8 +19,8 @@ function addUser() {
                                     <input id="new-email" type="email" class="email form-control" name="email" placeholder="Email" required>
                                 </div>
                                 <div class="user-position form-group"><input id="new-position" type="text" class="position form-control" name="position" placeholder="Position" required></div>
-                                <div class="user-confirm-btn"><a class="options" href='#' onclick="submitAddUserForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
-                                <div class="user-cancel-btn"><a class="options" href="#" onclick="cancelAddUserForm();" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                <div class="user-confirm-btn"><a class="options" onclick="submitAddUserForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                <div class="user-cancel-btn"><a class="options" onclick="cancelAddUserForm();" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
                             </div>
                             <hr>`;
         $('.options').tooltip({ delay: { show: 200, hide: 0 } });
@@ -42,8 +43,8 @@ function addGroup() {
                                     <input type="text" id="new-groupname" class="groupname form-control" name="groupname" placeholder="Group Name" required>
                                 </div>
                                 <button type="button" class="btn btn-primary" onclick="getUsersA();">+/- Users</button>
-                                <div class="group-confirm-btn"><a class="options" href='#' onclick="submitAddGroupForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
-                                <div class="group-cancel-btn"><a class="options" href="#" onclick="cancelAddGroupForm();" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                <div class="group-confirm-btn"><a class="options" onclick="submitAddGroupForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                <div class="group-cancel-btn"><a class="options" onclick="cancelAddGroupForm();" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
                             </div>
                             <hr>`;
         $('.options').tooltip({ delay: { show: 200, hide: 0 } });
@@ -209,8 +210,8 @@ function editUser(element) {
                                             <input id="edit-email" type="email" class="email form-control" name="email" value="${current_email}" placeholder="Email" required>
                                         </div>
                                     <div class="user-position form-group"><input id="edit-position" type="text" class="position form-control" name="position" value="${current_position}" placeholder="Position" required></div>
-                                    <div class="user-confirm-btn"><a class="options" href='#' onclick="submitEditUserForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
-                                    <div class="user-cancel-btn"><a class="options" href="#" onclick="cancelEditUserForm(${splitclass[1]}, '${current_name}', '${current_email}', '${current_position}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                    <div class="user-confirm-btn"><a class="options" onclick="submitEditUserForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                    <div class="user-cancel-btn"><a class="options" onclick="cancelEditUserForm(${splitclass[1]}, '${current_name}', '${current_email}', '${current_position}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
                                 </div>`;
         new_element.hidden = false;
         document.getElementById('user-table').replaceChild(new_element, current_user);
@@ -243,8 +244,8 @@ function editGroup(element) {
                                         <input type="text" id="edit-groupname" class="groupname form-control" name="groupname" value="${current_groupname}" placeholder="Group Name" required>
                                     </div>
                                     <button type="button" class="btn btn-primary" onclick="getUsersE(${splitclass[1]});">+/- Users</button>
-                                    <div class="group-confirm-btn"><a class="options" href='#' onclick="submitEditGroupForm(${splitclass[1]});" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
-                                    <div class="group-cancel-btn"><a class="options" href="#" onclick="cancelEditGroupForm(${splitclass[1]},'${current_usercount}','${current_groupname}','${current_participants}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                    <div class="group-confirm-btn"><a class="options" onclick="submitEditGroupForm(${splitclass[1]});" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                    <div class="group-cancel-btn"><a class="options" onclick="cancelEditGroupForm(${splitclass[1]},'${current_usercount}','${current_groupname}','${current_participants}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
                                 </div>`;
         new_element.hidden = false;
         document.getElementById('group-table').replaceChild(new_element, current_group);
@@ -401,8 +402,8 @@ function cancelEditUserForm(id, name, email, position) {
                             <i class="email">${email}</i>
                         </div>
                         <div class="user-position"><p class="position">${position}</p></div>
-                        <div class="user-edit-btn"><a class="options" class="edit" href="#" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                        <div class="user-delete-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>`;
+                        <div class="user-edit-btn"><a class="options" class="edit" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                        <div class="user-delete-btn"><a class="options" class="delete" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>`;
     document.getElementById('user-table').replaceChild(new_element, current_element);
     $('.options').tooltip({ delay: { show: 200, hide: 0 } });
 }
@@ -420,8 +421,8 @@ function cancelEditGroupForm(id, usercount, name, participants) {
                                 <b class="name">${name}</b>
                             </div>
                             <div class="group-participants"><p class="participants">${participants}</p></div>
-                            <div class="group-edit-btn"><a class="options" class="edit" href="#" onclick="editGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                            <div class="group-delete-btn"><a class="options" class="delete" href="#" onclick="deleteGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>`;
+                            <div class="group-edit-btn"><a class="options" class="edit" onclick="editGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                            <div class="group-delete-btn"><a class="options" class="delete" onclick="deleteGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>`;
     document.getElementById('group-table').replaceChild(new_element, current_element);
     $('#modal-users').empty();
     $('#all-chips').empty();
@@ -438,9 +439,9 @@ function addPage() {
         form.hidden = false;
         form.innerHTML += `<div class="page-input">
                                 <div class="page-name form-group"><input type="text" id="new-name" class="name form-control" name="pagename" placeholder="Page Name" required/></div>
-                                <button type="button" class="btn btn-primary" onclick="showHTMLModal();">Add HTML</button>
-                                <div class="page-confirm-btn"><a class="options" href='#' onclick="submitAddPageForm();"><ion-icon name="checkmark-outline"></ion-icon>&nbsp;Confirm</a></div>
-                                <div class="page-cancel-btn"><a class="options" href="#" onclick="cancelAddPageForm();"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</a></div>
+                                <button type="button" class="btn btn-primary" onclick="$('#add-content').modal()">Add HTML</button>
+                                <div class="page-confirm-btn"><a class="options" onclick="submitAddPageForm();"><ion-icon name="checkmark-outline"></ion-icon>&nbsp;Confirm</a></div>
+                                <div class="page-cancel-btn"><a class="options" onclick="cancelAddPageForm();"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</a></div>
                             </div>`;
         $('.options').tooltip({ delay: { show: 200, hide: 0 } });
         $('#new-name').focus();
@@ -450,8 +451,154 @@ function addPage() {
     }
 }
 
-function showHTMLModal() {
-    
+function saveHTMLContent() {
+    html_content = $('#modal-page-content-input').val();
+    $('#add-content').modal("hide");
+    $('.pages-table .page-input .btn.btn-primary').replaceWith(`<div class="content-status"><p class="saved"><ion-icon name="bookmark-outline"></ion-icon> Saved</p></div>`);
 }
 
+async function editPage(element) {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    if ($('#page-form-edit').length == 0) {
+        const current_page = element.parentElement;
+        const pid = current_page.className.split(" ")[1];
+        const response = await fetch(`landingpage/page/${parseInt(pid)}`);
+        const json_response = await response.json();
+        $('#page-form-new .page-input').remove();
+        const new_element = document.getElementById('page-form-new').cloneNode(true);
+        new_element.id = "page-form-edit";
+        new_element.action = "/landingpage/editpage";
+        new_element.innerHTML += `<div class="page-input">
+                                    <div class="page-name form-group"><input type="text" id="edit-name" class="name form-control" name="pagename" value="${json_response[0]}" placeholder="Page Name" required/></div>
+                                    <button type="button" class="btn btn-primary" onclick="$('#add-content').modal()">Add HTML</button>
+                                    <div class="page-confirm-btn"><a class="options" onclick="submitEditPageForm(${pid});"><ion-icon name="checkmark-outline"></ion-icon>&nbsp;Confirm</a></div>
+                                    <div class="page-cancel-btn"><a class="options" onclick="cancelEditPageForm(${pid}, '${json_response[0]}', '${json_response[1]}');"><ion-icon name="close-outline"></ion-icon>&nbsp;Cancel</a></div>
+                                </div>`;
+        new_element.hidden = false;
+        document.getElementById('pages-table').replaceChild(new_element, current_page);
+        $('#modal-page-content-input').val(json_response[2]);
+        $('#edit-name').focus();
+        $('.options').tooltip({ delay: { show: 200, hide: 0 } });
+    }
+    else {
+        alert("You can make only one edit at a time.");
+        $('#edit-name').focus();
+    }
+}
+
+function deletePage(element) {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    const current_page = element.parentElement;
+    const pid = current_page.className.split(" ")[1];
+    const flag = confirm("You are about to delete a landing page permanently. Is that okay?");
+    if (flag) {
+        const form = document.getElementById('page-form-new').cloneNode(true);
+        form.id = "page-form-delete";
+        form.action = "/landingpage/deletepage";
+        form.innerHTML += `<input type="text" name="pid" value="${pid}"/>`;
+        document.getElementById('pages-table').appendChild(form);
+        form.submit();
+        form.remove();
+    }
+}
+
+function submitAddPageForm() {
+    const page_name = $('#new-name').val();
+    if (page_name != "" && html_content != "") {
+        const form = document.getElementById('page-form-new');
+        const element = document.createElement("textarea");
+        element.name = "content";
+        element.value = html_content;
+        element.hidden = true;
+        form.appendChild(element);
+        form.submit();
+        $('#page-form-new .page-input').remove();
+        form.hidden = true;
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");   
+    }
+}
+
+function submitEditPageForm(id) {
+    const edited_name = $('#edit-name').val();
+    if (edited_name != "" && html_content != "") {
+        const form = document.getElementById('page-form-edit');
+        const element1 = document.createElement("input");
+        const element2 = document.createElement("textarea");
+        element1.name = "pid";
+        element1.value = id;
+        element1.hidden = true;
+        element2.name = "content";
+        element2.value = html_content;
+        element2.hidden = true;
+        form.appendChild(element1);
+        form.appendChild(element2);
+        form.submit();
+        $('#page-form-edit .page-input').remove();
+        form.hidden = true;
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");   
+    }
+}
+
+function cancelAddPageForm() {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    $('#page-form-new .page-input').remove();
+    document.getElementById('page-form-new').hidden = true;
+}
+
+function cancelEditPageForm(id, pagename, filename) {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    const current_element = document.getElementById('page-form-edit');
+    const new_element = document.createElement('div');
+    new_element.className = 'page ' + id;
+    new_element.innerHTML = `<div class="page-name"><b class="name">${pagename}</b></div>
+                            <div class="page-preview-btn"><a class="options" class="preview" target="_blank" href="/static/landingpages/${filename}.html" data-toggle="tooltip" data-placement="top" title="Preview"><ion-icon name="scan-outline"></ion-icon></a></div>
+                            <div class="page-edit-btn"><a class="options" class="edit" onclick="editPage(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                            <div class="page-delete-btn"><a class="options" class="delete" onclick="deletePage(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                            <div class="page-preview"><iframe class="preview" loading="lazy" src="/static/landingpages/${filename}.html"></iframe></div>`;
+    document.getElementById('pages-table').replaceChild(new_element, current_element);
+    $('#modal-page-content-input').val("");
+    $('.options').tooltip({ delay: { show: 200, hide: 0 } });
+}
 // Landing Pages (End) =============================================================================================================
+
+
+
+// Sending Profile (Start) =========================================================================================================
+function addProfile() {
+    if ($('#profile-form-new .profile-input').length == 0) {
+        const form = document.getElementById('profile-form-new');
+        form.hidden = false;
+        form.innerHTML += `<div class="profile-input">
+                                <div class="profile-details form-group">
+                                    <input type="text" id="new-name" class="name form-control" name="profilename" placeholder="Profile name" required/>
+                                    <input type="email" id="new-from" class="from form-control" name="profilefrom" placeholder="From" required/>
+                                </div>
+                                <div class="profile-interface form-group">
+                                    <select id="new-interface" class="interface form-control" name="profileinterface">
+                                        <option value="SMTP">SMTP</option>
+                                    </select>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="$('#profile-settings').modal()">+ Settings</button>
+                                <div class="profile-confirm-btn"><a class="options" onclick="submitAddProfileForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                <div class="profile-cancel-btn"><a class="options" onclick="cancelAddProfileForm();" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                            </div>`;
+        $('.options').tooltip({ delay: { show: 200, hide: 0 } });
+        $('#new-name').focus();
+    }
+    else {
+        $('#new-name').focus();
+    }
+}
+
+function cancelAddProfileForm() {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    $('#profile-form-new .profile-input').remove();
+    document.getElementById('profile-form-new').hidden = true;
+}
+// Sending Profile (End) ===========================================================================================================

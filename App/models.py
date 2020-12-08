@@ -30,9 +30,6 @@ class CampaignResults(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     user = models.ForeignKey(Targets, on_delete=models.CASCADE)
     userClickStatus = models.BooleanField()
-    #userEmailOpened
-    #userCred
-
 
 
 class UserGroups(models.Model):
@@ -59,8 +56,8 @@ class EmailTemp(models.Model):
 
 class LandingPage(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=20, unique=True)
-    content = models.TextField()
+    name = models.CharField(max_length=50, unique=True)
+    filename = models.CharField(max_length=50, unique=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
 
 
@@ -68,7 +65,8 @@ class SendingProfile(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
     _from = models.EmailField(max_length=100, db_column='from')
-    host = models.GenericIPAddressField(protocol='both', unpack_ipv4=False)
+    host = models.CharField(max_length=100)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=512)
+    created_on = models.DateTimeField(auto_now_add=True)
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')

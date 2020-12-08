@@ -15,8 +15,8 @@
                                     <i class="email">{{ d.email }}</i>
                                 </div>
                                 <div class="user-position"><p class="position">{{ d.position }}</p></div>
-                                <div class="user-edit-btn"><a class="options" class="edit" href="#" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                                <div class="user-delete-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                                <div class="user-edit-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                                <div class="user-delete-btn"><a class="options" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
                             </div>
                             <hr>
                         {% endfor %}
@@ -47,8 +47,8 @@
                         <b class="name">{{ d.groupName }}</b>
                     </div>
                     <div class="group-participants"><p class="participants">{{ d.totalUsers }} people</p></div>
-                    <div class="group-edit-btn"><a class="options" class="edit" href="#" onclick="editGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                    <div class="group-delete-btn"><a class="options" class="delete" href="#" onclick="deleteGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                    <div class="group-edit-btn"><a class="options" onclick="editGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                    <div class="group-delete-btn"><a class="options" onclick="deleteGroup(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
                   </div>
                   <hr>
                 {% endfor %}

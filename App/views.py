@@ -7,7 +7,7 @@ from django.core.mail import get_connection, send_mail
 from django.core.mail import EmailMultiAlternatives
 from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp
 from PIL import Image
-import json
+import json, uuid, os
 
 
 def dashboard(request):
@@ -50,6 +50,7 @@ def campaign(request):
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
 
+
 def usergroups(request):
     if request.session.has_key('id'):
         id = request.session['id']
@@ -57,6 +58,7 @@ def usergroups(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
 
 def addUser(request):
     if request.session.has_key('id'):
@@ -73,6 +75,9 @@ def addUser(request):
             obj.save()
             return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def addGroup(request):
@@ -94,6 +99,9 @@ def addGroup(request):
                     obj2.save()
             return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def editUser(request):
@@ -114,6 +122,9 @@ def editUser(request):
             else:
                 addUser(request)
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def editGroup(request):
@@ -147,6 +158,9 @@ def editGroup(request):
             record.save()
             return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def modUsersTable(table):
@@ -164,6 +178,9 @@ def getUsersA(request):
         users_table = Targets.objects.filter(userId=id)
         mod_users = modUsersTable(users_table)
         return HttpResponse(json.dumps(mod_users))
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def getCurrentUsers(qset):
@@ -184,6 +201,9 @@ def getUsersE(request, gid):
             data = [current_users, mod_users]
             return HttpResponse(json.dumps(data))
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def deleteUser(request):
@@ -196,6 +216,9 @@ def deleteUser(request):
                 record.delete()
             return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def deleteGroup(request):
@@ -208,6 +231,9 @@ def deleteGroup(request):
             UserGroups.objects.get(groupId=request.POST['gid']).delete()
             return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
 
 
 def emailtemp(request):
@@ -259,16 +285,103 @@ def sendingprofile(request):
 def landingpage(request):
     if request.session.has_key('id'):
         id = request.session['id']       
+        return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages", "data": LandingPage.objects.filter(userId=id) })
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def createFile(op, filename, content):
+    filename = filename + ".html"
+    current_dir = os.path.dirname(__file__)
+    relative_path = "../static/landingpages/" + filename
+    filepath =  os.path.join(current_dir, relative_path)
+    f = open(filepath, op, encoding="utf-8")
+    f.write(content)
+    f.close()
+
+
+def readFile(filename):
+    filename = filename + ".html"
+    current_dir = os.path.dirname(__file__)
+    relative_path = "../static/landingpages/" + filename
+    filepath = os.path.join(current_dir, relative_path)
+    f = open(filepath, "r", encoding="utf-8")
+    data = f.read()
+    f.close()
+    return data
+
+
+def deleteFile(filename):
+    filename = filename + ".html"
+    current_dir = os.path.dirname(__file__)
+    relative_path = "../static/landingpages/" + filename
+    filepath = os.path.join(current_dir, relative_path)
+    if os.path.exists(filepath):
+        os.remove(filepath)
+
+
+def addPage(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
         if request.method == "POST":
             obj = LandingPage()
-            if request.POST['name'] and request.POST['html']:
-                obj.name = request.POST['name']
-                obj.content = request.POST['html']
-                obj.userId_id = id
-                obj.save()
-                return redirect('/landingpage')
-            return HttpResponse("No Data in fields")        
-        return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages" })
+            fname = uuid.uuid4().hex
+            createFile("w+", fname, request.POST['content'])
+            obj.name = request.POST['pagename']
+            obj.filename = fname
+            obj.userId_id = id
+            obj.save()
+            return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages", "data": LandingPage.objects.filter(userId=id) })
+        return redirect("/landingpage")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def getPageDetails(request, pid):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        record = LandingPage.objects.get(id=pid)
+        content = readFile(record.filename)
+        pagedetails = [record.name, record.filename, content]
+        return HttpResponse(json.dumps(pagedetails))
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def editPage(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        if request.method == "POST":
+            pid = request.POST['pid']
+            queryset = LandingPage.objects.filter(id=pid)
+            if queryset.exists():
+                record = LandingPage.objects.get(id=pid)
+                createFile("w", record.filename, request.POST['content'])
+                record.name = request.POST['pagename']
+                record.userId_id = id
+                record.save()
+                return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages", "data": LandingPage.objects.filter(userId=id) })
+        return redirect("/landingpage")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def deletePage(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        if request.method == "POST":
+            pid  = request.POST['pid']
+            queryset = LandingPage.objects.filter(id=pid)
+            if queryset.exists():
+                record = LandingPage.objects.get(id=pid)
+                deleteFile(record.filename)
+                record.delete()
+                return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages", "data": LandingPage.objects.filter(userId=id) })
+        return redirect("/landingpage")
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")

@@ -39,6 +39,10 @@ urlpatterns = [
     path('emailtemp',views.emailtemp,name="emailtemp"),
     path('sendingprofile',views.sendingprofile,name="sendingprofile"),
     path('landingpage',views.landingpage,name="landingpage"),
+    path('landingpage/addpage', views.addPage, name="addpage"),
+    path('landingpage/editpage', views.editPage, name="editpage"),
+    path('landingpage/deletepage', views.deletePage, name="deletepage"),
+    path('landingpage/page/<int:pid>', views.getPageDetails, name="pagedetails"),
     path('accountsettings',views.accountsettings,name="accountsettings"),
     url(r'^image_load/(?P<id>[0-9]+)/$', views.image_load, name='image_load'),
 

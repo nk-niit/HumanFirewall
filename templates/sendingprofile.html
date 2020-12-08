@@ -5,19 +5,71 @@
         <div class="row">
             <div class="col-12 text-center">
                 <div class="sending-profiles">
-                    <button class="btn add">+&nbsp; Sending Profile</button>
+                    <div id="profiles-table" class="profiles-table">
+                        <div class="profile 1">
+                            <div class="profile-main">
+                                <b class="name">Sending Profile 1</b>
+                                <i class="from">navneeth.krishnan@st.niituniversity.in</i>
+                            </div>
+                            <div class="profile-interface"><p class="interface">SMTP</p></div>
+                            <div class="profile-created-on">
+                                <p class="created-date">Dec 12th 2020</p>
+                                <p class="created-time">15:29:04</p>
+                            </div>
+                            <div class="profile-edit-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                            <div class="profile-delete-btn"><a class="options" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                        </div>
+                        <div class="profile 2">
+                            <div class="profile-main">
+                                <b class="name">Sending Profile 2</b>
+                                <i class="from">navneeth.krishnan@st.niituniversity.in</i>
+                            </div>
+                            <div class="profile-interface"><p class="interface">SMTP</p></div>
+                            <div class="profile-created-on">
+                                <p class="created-date">December 12th 2020</p>
+                                <p class="created-time">15:29:04</p>
+                            </div>
+                            <div class="profile-edit-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                            <div class="profile-delete-btn"><a class="options" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                        </div>
+                        <form id="profile-form-new" method="POST" action="/sendingprofile/addprofile" hidden>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <button class="btn add" onclick="addProfile();">+&nbsp; Sending Profile</button>
                 </div>
-                <!-- <form id="form" method="POST" action="#">
-                    {% csrf_token %}
-                    <label for="name">Name: <input type="text" name="name"/></label>
-                    <label for="from">From: <input type="text" name="from"/></label>
-                    <label for="host">Host: <input type="text" name="host"/></label>
-                    <label for="username">Username: <input type="text" name="username"/></label>
-                    <label for="password">Password: <input type="password" name="password"/></label>
-    
-                    <button class="btn btn-success" type="submit" id="create_profile">Create</button>
-                </form> -->
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="profile-settings" tabindex="-1" role="dialog" aria-labelledby="profile-settings-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="profile-settings-title">Settings</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-host form-group">
+                    <label for="profilehost">Host:</label>
+                    <input type="text" id="new-host" class="host form-control" name="profilehost" placeholder="Host" required/>
+                </div>
+                <div class="profile-username form-group">
+                    <label for="profileusername">Username:</label>
+                    <input type="text" id="new-username" class="username form-control" name="profileusername" placeholder="Username" required/>
+                </div>
+                <div class="profile-password form-group">
+                    <label for="profilepassword">Password:</label>
+                    <input type="password" id="new-password" class="password form-control" name="profilepassword" placeholder="Password" required/>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">Close</button>
+              <button type="button" class="btn btn-primary" onclick="saveSettings();">Save</button>
+            </div>
+          </div>
         </div>
     </div>
 

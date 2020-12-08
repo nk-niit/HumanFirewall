@@ -6,20 +6,44 @@
             <div class="col-12 text-center">
                 <div class="landing-pages">
                     <div id="pages-table" class="pages-table">
-                        <div class="page 1">
-                            <div class="page-name"><b class="name">Facebook</b></div>
-                            <div class="page-preview-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Preview"><ion-icon name="scan-outline"></ion-icon></a></div>
-                            <div class="page-edit-btn"><a class="options" class="edit" href="#" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                            <div class="page-delete-btn"><a class="options" class="delete" href="#" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
-                            <div class="page-preview"><iframe class="preview" loading="lazy" src="{% static 'landingpages/test.html' %}"></iframe></div>
-                        </div>
-                        <form id="page-form-new" method="POST" action="/landingpage/addpage" hidden>
-                            {% csrf_token %}
-                        </form>
+                      {% if data.values.count > 0 %}
+                        {% for d in data.values %}
+                          <div class="page {{ d.id }}">
+                              <div class="page-name"><b class="name">{{ d.name }}</b></div>
+                              <div class="page-preview-btn"><a class="options" class="preview" target="_blank" href="{% static 'landingpages/'|add:d.filename|add:'.html' %}" data-toggle="tooltip" data-placement="top" title="Preview"><ion-icon name="scan-outline"></ion-icon></a></div>
+                              <div class="page-edit-btn"><a class="options" onclick="editPage(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                              <div class="page-delete-btn"><a class="options" onclick="deletePage(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                              <div class="page-preview"><iframe class="preview" loading="lazy" src="{% static 'landingpages/'|add:d.filename|add:'.html' %}"></iframe></div>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                      <form id="page-form-new" method="POST" action="/landingpage/addpage" hidden>
+                          {% csrf_token %}
+                      </form>
                     </div>
                     <button class="btn add" onclick="addPage();">+&nbsp; Landing Page</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add-content" tabindex="-1" role="dialog" aria-labelledby="add-content-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="add-content-title">Add HTML Code</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="modal-page-content-input" class="form-control modal-page-content-input" placeholder="Type / Paste your HTML code here"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">Close</button>
+              <button type="button" class="btn btn-primary" onclick="saveHTMLContent();">Save</button>
+            </div>
+          </div>
         </div>
     </div>
 {% endblock %}
