@@ -12,7 +12,8 @@ import json, uuid, os
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard" })
+
+        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard","data": CampaignResults.objects.all() })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -465,6 +466,7 @@ def image_load(request,iid):
     ida = CampaignResults.objects.get(image_id = iid)
     ida.userEmailStatus = True
     ida.save()
+    print("Image Loaded and Database updated")
     red = Image.new('RGB', (1, 1))
     response = HttpResponse(content_type="image/png")
     red.save(response, "PNG")

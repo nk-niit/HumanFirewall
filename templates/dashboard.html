@@ -2,7 +2,15 @@
 {% block content %}
 
     <div class="container-fluid content">
-        
+        {% if data.values.count > 0 %}
+            {% for d in data.values %}
+                <p>{{ d.id }}</p><hr>
+                <p>{{ d.campaign }}</p><hr>
+                <p>{{ d.user }}</p><hr>
+                <p>{{ d.image_id }}</p><hr>
+                <p>{{ d.userEmailStatus }}</p>
+            {% endfor %}
+        {% endif %}
     </div>
 
 {% endblock %}
