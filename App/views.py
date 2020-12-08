@@ -41,8 +41,8 @@ def runcampaign(targets,sendprofile,emaildata, campname):
         msg.send()
         campn = Campaign.objects.get(campaignName=campname)
         objcampresult = CampaignResults()
-        objcampresult.campaignId = campn.campId
-        objcampresult.user_Id = key
+        objcampresult.campaign_id = campn.campId
+        objcampresult.user_id = key
         objcampresult.image_id = randomise
         objcampresult.save()
 
