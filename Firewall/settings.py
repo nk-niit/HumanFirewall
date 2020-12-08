@@ -26,7 +26,7 @@ SECRET_KEY = 'icsaeliq(@w!j46wuyha7&hnbl*^m6)hxiq_gxjdi_$e!a6)8p'
 DEBUG = True
 #hello ouvais
 
-ALLOWED_HOSTS = ['firewallapp.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = ['firewallapp.herokuapp.com','localhost']
 
 # Application definition
 
