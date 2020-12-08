@@ -18,7 +18,7 @@ services:
     environment:
       - POSTGRES_DB=human_firewall
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=welcome@hf
+      - POSTGRES_PASSWORD="welcome@hf"
 
 volumes:
   db_volume:
