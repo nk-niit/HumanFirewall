@@ -5,21 +5,20 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import get_connection, send_mail
 from django.core.mail import EmailMultiAlternatives
-from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp, Campaign
+from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp, CampaignResults, Campaign
 from PIL import Image
 import json, uuid, os
-
 
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard" })
+        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard","data": CampaignResults.objects.all() })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
 
 
-def runcampaign(targets,sendprofile,emaildata):
+def runcampaign(targets,sendprofile,emaildata, campname):
     my_host = sendprofile[1].split(':')[0]
     my_port = int(sendprofile[1].split(':')[1])
     my_username = sendprofile[2]
@@ -30,18 +29,23 @@ def runcampaign(targets,sendprofile,emaildata):
                                 username=my_username,
                                 password=my_password,
                                 use_tls=my_use_tls)
-    for i in targets:
-        subject, from_email, to = emaildata[0], sendprofile[0], i
+    for key,value in targets.items():
+        subject, from_email, to = emaildata[0], sendprofile[0], value
         text_content = 'Random'
         randomise = uuid.uuid4().hex
         imageurl = '<img src = "http://firewallapp.herokuapp.com/image_load/'+randomise+'" width="0px" height="0px"/>'
         splitbodypart = emaildata[1].split('</body>')
         bodypart = splitbodypart[0]+imageurl+"</body>"+splitbodypart[1]
         print(bodypart)
-        #msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
-        #msg.attach_alternative(bodypart, "text/html")
-        #msg.send()
-
+        msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
+        msg.attach_alternative(bodypart, "text/html")
+        msg.send()
+        campn = Campaign.objects.get(campaignName=campname)
+        objcampresult = CampaignResults()
+        objcampresult.campaign_id = campn.campId
+        objcampresult.user_id = key
+        objcampresult.image_id = randomise
+        objcampresult.save()
 
 
 def campaign(request):
@@ -55,15 +59,14 @@ def campaign(request):
             group = request.POST['group']
             objug = UserGroups.objects.get(groupName=group)
             objgu = GroupedUsers.objects.filter(group_id=objug.groupId)
-            targetsemail = []
+            targetsemail = {}
             for i in objgu:
                 objt = Targets.objects.get(id=i.user_id)
-                targetsemail.append(objt.email)
+                targetsemail[objt.id] = objt.email
             objs = SendingProfile.objects.get(name=sending_profile)
-            profile = [objs.email_from,objs.host,objs.username,objs.password]
+            profile = [objs._from,objs.host,objs.username,objs.password]
             obje = EmailTemp.objects.get(tempName=email_template)
             emaildata = [obje.subject,obje.text_html]
-            runcampaign(targetsemail, profile, emaildata)
             objl = LandingPage.objects.get(name=landing_page)
             campaign_obj = Campaign()
             campaign_obj.campaignName = campaign_name
@@ -73,6 +76,7 @@ def campaign(request):
             campaign_obj.group = objug.groupId
             campaign_obj.userId_id = id
             campaign_obj.save()
+            runcampaign(targetsemail, profile, emaildata, campaign_name)
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
         return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
     else:
@@ -87,7 +91,6 @@ def usergroups(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
-
 
 def addUser(request):
     if request.session.has_key('id'):
@@ -497,8 +500,10 @@ def logoutfunc(request):
 
 
 def image_load(request,iid):
-    print("\nImage Loaded\n")
-    print(iid)
+    ida = CampaignResults.objects.get(image_id = iid)
+    ida.userEmailStatus = True
+    ida.save()
+    print("Image Loaded and Database updated")
     red = Image.new('RGB', (1, 1))
     response = HttpResponse(content_type="image/png")
     red.save(response, "PNG")
