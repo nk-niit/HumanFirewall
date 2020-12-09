@@ -542,7 +542,7 @@ img {
 .pages-table .page-input .page-cancel-btn {
     bottom: 5%;
     font-size: 15px;
-    width: 85px;
+    width: fit-content;
     position: absolute;
     left: 35%;
     vertical-align: middle;
@@ -563,7 +563,7 @@ img {
 .pages-table .page-input .page-confirm-btn {
     bottom: 5%;
     font-size: 15px;
-    width: 85px;
+    width: fit-content;
     position: absolute;
     left: 5%;
     vertical-align: middle;
@@ -652,6 +652,13 @@ img {
     height: 100%;
     padding: 5px;
     resize: none;
+}
+.modal-body .profile-host, .modal-body .profile-username, .modal-body .profile-password {
+    margin-bottom: 20px;
+}
+.modal-body .profile-test-email {
+    position: absolute;
+    bottom: 10px;
 }
 
 

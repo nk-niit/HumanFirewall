@@ -191,14 +191,13 @@ function saveSelectedUsers() {
     }
 }
 
-function editUser(element) {
+async function editUser(element) {
     $('[data-toggle="tooltip"]').tooltip("hide");
     if ($('#user-form-edit').length == 0) {
         const current_user = element.parentElement;
-        const splitclass = current_user.className.split(" ");
-        const current_name = $(`.${splitclass[0]}.${splitclass[1]} .user-personal .name`).html();
-        const current_email = $(`.${splitclass[0]}.${splitclass[1]} .user-personal .email`).html();
-        const current_position = $(`.${splitclass[0]}.${splitclass[1]} .user-position .position`).html();
+        const uid = current_user.className.split(" ")[1];
+        const response = await fetch(`/usergroups/user/${parseInt(uid)}`);
+        const json_response = await response.json();
         $('#user-form-new .user-input, #user-form-new hr').remove();
         const new_element = document.getElementById('user-form-new').cloneNode(true);
         new_element.id = "user-form-edit";
@@ -206,12 +205,12 @@ function editUser(element) {
         new_element.innerHTML += `<div class="user-input">
                                     <div class="user-icon"><ion-icon name="person-circle-sharp"></ion-icon></div>
                                         <div class="user-personal form-group">
-                                            <input type="text" id="edit-name" class="name form-control" name="fullname" value="${current_name}" placeholder="Full Name" required>
-                                            <input id="edit-email" type="email" class="email form-control" name="email" value="${current_email}" placeholder="Email" required>
+                                            <input type="text" id="edit-name" class="name form-control" name="fullname" value="${json_response[0]}" placeholder="Full Name" required>
+                                            <input id="edit-email" type="email" class="email form-control" name="email" value="${json_response[1]}" placeholder="Email" required>
                                         </div>
-                                    <div class="user-position form-group"><input id="edit-position" type="text" class="position form-control" name="position" value="${current_position}" placeholder="Position" required></div>
-                                    <div class="user-confirm-btn"><a class="options" onclick="submitEditUserForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
-                                    <div class="user-cancel-btn"><a class="options" onclick="cancelEditUserForm(${splitclass[1]}, '${current_name}', '${current_email}', '${current_position}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                    <div class="user-position form-group"><input id="edit-position" type="text" class="position form-control" name="position" value="${json_response[2]}" placeholder="Position" required></div>
+                                    <div class="user-confirm-btn"><a class="options" onclick="submitEditUserForm(${uid});" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                    <div class="user-cancel-btn"><a class="options" onclick="cancelEditUserForm(${uid}, '${json_response[0]}', '${json_response[1]}', '${json_response[2]}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
                                 </div>`;
         new_element.hidden = false;
         document.getElementById('user-table').replaceChild(new_element, current_user);
@@ -224,14 +223,20 @@ function editUser(element) {
     }
 }
 
-function editGroup(element) {
+async function editGroup(element) {
     $('[data-toggle="tooltip"]').tooltip("hide");
     if ($('#group-form-edit').length == 0) {
         const current_group = element.parentElement;
-        const splitclass = current_group.className.split(" ");
-        const current_usercount = $(`.${splitclass[0]}.${splitclass[1]} .group-user-count .user-count`).html();
-        const current_groupname = $(`.${splitclass[0]}.${splitclass[1]} .group-name .name`).html();
-        const current_participants = $(`.${splitclass[0]}.${splitclass[1]} .group-participants .participants`).html();
+        const gid = current_group.className.split(" ")[1];
+        const response = await fetch(`/usergroups/group/${parseInt(gid)}`);
+        const json_response = await response.json();
+        let usercount;
+        if (json_response[1] > 3) {
+            usercount = json_response[1] - 3;
+        }
+        else {
+            usercount = 0;
+        }
         $('#group-form-new .group-input, #group-form-new hr').remove();
         const new_element = document.getElementById('group-form-new').cloneNode(true);
         new_element.id = "group-form-edit";
@@ -241,11 +246,11 @@ function editGroup(element) {
                                     <div class="group-icon i2"><ion-icon name="person-circle-sharp"></ion-icon></div>
                                     <div class="group-icon i3"><ion-icon name="person-circle-sharp"></ion-icon></div>
                                     <div class="group-name form-group">
-                                        <input type="text" id="edit-groupname" class="groupname form-control" name="groupname" value="${current_groupname}" placeholder="Group Name" required>
+                                        <input type="text" id="edit-groupname" class="groupname form-control" name="groupname" value="${json_response[0]}" placeholder="Group Name" required>
                                     </div>
-                                    <button type="button" class="btn btn-primary" onclick="getUsersE(${splitclass[1]});">+/- Users</button>
-                                    <div class="group-confirm-btn"><a class="options" onclick="submitEditGroupForm(${splitclass[1]});" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
-                                    <div class="group-cancel-btn"><a class="options" onclick="cancelEditGroupForm(${splitclass[1]},'${current_usercount}','${current_groupname}','${current_participants}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                    <button type="button" class="btn btn-primary" onclick="getUsersE(${gid});">+/- Users</button>
+                                    <div class="group-confirm-btn"><a class="options" onclick="submitEditGroupForm(${gid});" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                    <div class="group-cancel-btn"><a class="options" onclick="cancelEditGroupForm(${gid},'${usercount}','${json_response[0]}','${json_response[1]}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
                                 </div>`;
         new_element.hidden = false;
         document.getElementById('group-table').replaceChild(new_element, current_group);
@@ -308,17 +313,17 @@ function submitAddUserForm() {
 }
 
 function submitAddGroupForm() {
-    const form = document.getElementById('group-form-new');
-    const element1 = document.createElement("input");
-    const element2 = document.createElement("input");
-    element1.name = "users";
-    element1.value = selected_userlist;
-    element1.hidden = true;
-    element2.name = "totalusers";
-    element2.value = selected_userlist.length;
-    element2.hidden = true;
     const groupname = $('#new-groupname').val();
     if (groupname != "" && selected_userlist.length > 0) {
+        const form = document.getElementById('group-form-new');
+        const element1 = document.createElement("input");
+        const element2 = document.createElement("input");
+        element1.name = "users";
+        element1.value = selected_userlist;
+        element1.hidden = true;
+        element2.name = "totalusers";
+        element2.value = selected_userlist.length;
+        element2.hidden = true;
         form.appendChild(element1);
         form.appendChild(element2);
         form.submit();
@@ -335,14 +340,20 @@ function submitAddGroupForm() {
     }
 }
 
-function submitEditUserForm() {
+function submitEditUserForm(uid) {
     const name = $('#edit-name').val();
     const email = $('#edit-email').val();
     const position = $('#edit-position').val();
     if (name != '' && email != '' && position != '') {
         const form = document.getElementById('user-form-edit');
+        const element1 = document.createElement("input");
+        element1.name = "uid";
+        element1.value = uid;
+        element1.hidden = true;
+        form.appendChild(element1);
         form.submit();
-        $('#user-form-edit').remove();
+        $('#user-form-edit .user-input').remove();
+        form.hidden = true;
     }
     else {
         $('[data-toggle="tooltip"]').tooltip("hide");
@@ -351,30 +362,41 @@ function submitEditUserForm() {
 }
 
 function submitEditGroupForm(gid) {
-    const form = document.getElementById('group-form-edit');
-    const element1 = document.createElement("input");
-    const element2 = document.createElement("input");
-    const element3 = document.createElement("input");
-    const element4 = document.createElement("input");
-    element1.name = "gid";
-    element1.value = gid;
-    element1.hidden = true;
-    element2.name = "initialusers";
-    element2.value = initial_selected_userlist;
-    element2.hidden = true;
-    element3.name = "selectedusers";
-    element3.value = selected_userlist;
-    element3.hidden = true;
-    element4.name = "totalusers";
-    element4.value = selected_userlist.length;
-    element4.hidden = true;
-    form.appendChild(element1);
-    form.appendChild(element2);
-    form.appendChild(element3);
-    form.appendChild(element4);
-    form.submit();
-    $('#group-form-edit .group-input').remove();
-    form.hidden = true;
+    const groupname = $('#edit-groupname').val();
+    if (groupname != "" && selected_userlist.length > 0) {
+        const form = document.getElementById('group-form-edit');
+        const element1 = document.createElement("input");
+        const element2 = document.createElement("input");
+        const element3 = document.createElement("input");
+        const element4 = document.createElement("input");
+        element1.name = "gid";
+        element1.value = gid;
+        element1.hidden = true;
+        element2.name = "initialusers";
+        element2.value = initial_selected_userlist;
+        element2.hidden = true;
+        element3.name = "selectedusers";
+        element3.value = selected_userlist;
+        element3.hidden = true;
+        element4.name = "totalusers";
+        element4.value = selected_userlist.length;
+        element4.hidden = true;
+        form.appendChild(element1);
+        form.appendChild(element2);
+        form.appendChild(element3);
+        form.appendChild(element4);
+        form.submit();
+        $('#group-form-edit .group-input').remove();
+        form.hidden = true;
+    }
+    else if (groupname == "" && selected_userlist.length >= 0) {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("No users have been added to this group. Please add users to confirm.");   
+    }
 }
 
 function cancelAddUserForm() {
@@ -462,7 +484,7 @@ async function editPage(element) {
     if ($('#page-form-edit').length == 0) {
         const current_page = element.parentElement;
         const pid = current_page.className.split(" ")[1];
-        const response = await fetch(`landingpage/page/${parseInt(pid)}`);
+        const response = await fetch(`/landingpage/page/${parseInt(pid)}`);
         const json_response = await response.json();
         $('#page-form-new .page-input').remove();
         const new_element = document.getElementById('page-form-new').cloneNode(true);
@@ -596,9 +618,94 @@ function addProfile() {
     }
 }
 
+async function editProfile(element) {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    if ($('#profile-form-edit').length == 0) {
+        const current_profile = element.parentElement;
+        const pid = current_profile.className.split(" ")[1];
+        const response = await fetch(`/sendingprofile/profile/${parseInt(pid)}`);
+        const json_response = await response.json();
+        $('#profile-form-new .profile-input').remove();
+        const new_element = document.getElementById('profile-form-new').cloneNode(true);
+        new_element.id = "profile-form-edit";
+        new_element.action = "/sendingprofile/editprofile";
+        new_element.innerHTML += `<div class="profile-input">
+                                    <div class="profile-details form-group">
+                                        <input type="text" id="edit-name" class="name form-control" name="profilename" value="${json_response[0]}" placeholder="Profile name" required/>
+                                        <input type="email" id="edit-from" class="from form-control" name="profilefrom" value="${json_response[1]}" placeholder="From" required/>
+                                    </div>
+                                    <div class="profile-interface form-group">
+                                        <select id="edit-interface" class="interface form-control" name="profileinterface">
+                                            <option value="SMTP">SMTP</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="$('#profile-settings').modal()">+ Settings</button>
+                                    <div class="profile-confirm-btn"><a class="options" onclick="submitAddProfileForm(${pid});" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                    <div class="profile-cancel-btn"><a class="options" onclick="cancelAddProfileForm(${pid}, '${json_response[0]}', '${json_response}');" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                                </div>`;
+        new_element.hidden = false;
+        document.getElementById('profiles-table').replaceChild(new_element, current_profile);
+        document.getElementById('new-host').id = "edit-host";
+        document.getElementById('new-username').id = "edit-username";
+        document.getElementById('new-password').id = "edit-password";
+        $('#edit-host').val(json_response[2]);
+        $('#edit-username').val(json_response[3]);
+        $('#edit-password').val(json_response[4]);
+        $('#edit-name').focus();
+        $('.options').tooltip({ delay: { show: 200, hide: 0 } });
+    }
+    else {
+        alert("You can make only one edit at a time.");
+        $('#edit-name').focus();
+    }
+}
+
+function submitAddProfileForm() {
+    const profile_name = $('#new-name').val();
+    const profile_from = $('#new-from').val();
+    const profile_interface = $('#new-interface').val();
+    const profile_host = $('#new-host').val();
+    const profile_username = $('#new-username').val();
+    const profile_password = $('#new-password').val();
+    if (profile_name != "" && profile_from != "" && profile_interface != "" && profile_host != "" && profile_username != "" && profile_password != "") {
+        const form = document.getElementById('profile-form-new');
+        const element1 = document.createElement("input");
+        const element2 = document.createElement("input");
+        const element3 = document.createElement("input");
+        element1.name = "profilehost";
+        element1.value = profile_host;
+        element1.hidden = true;
+        element2.name = "profileusername";
+        element2.value = profile_username;
+        element2.hidden = true;
+        element3.name = "profilepassword";
+        element3.value = profile_password;
+        element3.hidden = true;
+        form.appendChild(element1);
+        form.appendChild(element2);
+        form.appendChild(element3);
+        form.submit();
+        $('#profile-form-new .profile-input').remove();
+        form.hidden = true;
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");   
+    }
+}
+
 function cancelAddProfileForm() {
     $('[data-toggle="tooltip"]').tooltip("hide");
     $('#profile-form-new .profile-input').remove();
     document.getElementById('profile-form-new').hidden = true;
 }
 // Sending Profile (End) ===========================================================================================================
+
+
+
+// Email Templates (Start) =========================================================================================================
+function addTemplate() {
+    
+}
+
+// Email Templates (End) ===========================================================================================================

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.mail import get_connection, send_mail
 from django.core.mail import EmailMultiAlternatives
-from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp
+from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp, Campaign
 from PIL import Image
 import json, uuid, os
 
@@ -17,6 +17,7 @@ def dashboard(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
 
 def runcampaign(targets,sendprofile,emaildata):
     my_host = sendprofile[1].split(':')[0]
@@ -49,8 +50,8 @@ def campaign(request):
         if (request.method == "POST"):
             campaign_name = request.POST['campname']
             email_template = request.POST['emailtemp']
-            landing_page = request.POST['landpage']
             sending_profile = request.POST['sendprofile']
+            landing_page = request.POST['landpage']
             group = request.POST['group']
             objug = UserGroups.objects.get(groupName=group)
             objgu = GroupedUsers.objects.filter(group_id=objug.groupId)
@@ -58,23 +59,26 @@ def campaign(request):
             for i in objgu:
                 objt = Targets.objects.get(id=i.user_id)
                 targetsemail.append(objt.email)
-
-            objs = SendingProfile.objects.get(name = sending_profile)
-            profile = [objs._from,objs.host,objs.username,objs.password]
-
-            obje = EmailTemp.objects.get(tempName = email_template)
+            objs = SendingProfile.objects.get(name=sending_profile)
+            profile = [objs.email_from,objs.host,objs.username,objs.password]
+            obje = EmailTemp.objects.get(tempName=email_template)
             emaildata = [obje.subject,obje.text_html]
-
-            runcampaign(targetsemail,profile,emaildata)
-
-
-
-
+            runcampaign(targetsemail, profile, emaildata)
+            objl = LandingPage.objects.get(name=landing_page)
+            campaign_obj = Campaign()
+            campaign_obj.campaignName = campaign_name
+            campaign_obj.emailTemplate = obje.tempId
+            campaign_obj.landingPage = objl.id
+            campaign_obj.sendingProfile = objs.id
+            campaign_obj.group = objug.groupId
+            campaign_obj.userId_id = id
+            campaign_obj.save()
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
         return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
 
 def usergroups(request):
     if request.session.has_key('id'):
@@ -129,24 +133,44 @@ def addGroup(request):
         return redirect("login")
 
 
+def getUserDetails(request, uid):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        record = Targets.objects.get(id=uid)
+        fullname = record.firstName + " " + record.lastName
+        userdetails = [fullname, record.email, record.position]
+        return HttpResponse(json.dumps(userdetails))
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
 def editUser(request):
     if request.session.has_key('id'):
         id = request.session['id']
         if request.method == "POST":
-            queryset = Targets.objects.filter(email=request.POST['email'])
-            if queryset.exists():
-                record = Targets.objects.get(email=request.POST['email'])
-                fullname = request.POST['fullname']
-                fullname_list = fullname.split(" ")
-                record.firstName = fullname_list[0]
-                record.lastName = fullname_list[1]
-                record.position = request.POST['position']
-                record.userId_id = id
-                record.save()
-                return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
-            else:
-                addUser(request)
+            record = Targets.objects.get(id=request.POST['uid'])
+            fullname = request.POST['fullname']
+            fullname_list = fullname.split(" ")
+            record.firstName = fullname_list[0]
+            record.lastName = fullname_list[1]
+            record.email = request.POST['email']
+            record.position = request.POST['position']
+            record.userId_id = id
+            record.save()
+            return render(request, "usergroups.html", context={ "title": "Users & Groups - Human Firewall", "header": "Users & Groups", "user_data": Targets.objects.filter(userId=id), "group_data": UserGroups.objects.filter(userId=id) })
         return redirect("/usergroups")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def getGroupDetails(request, gid):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        record = UserGroups.objects.get(groupId=gid)
+        groupdetails = [record.groupName, record.totalUsers]
+        return HttpResponse(json.dumps(groupdetails))
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -282,26 +306,45 @@ def emailtemp(request):
 def sendingprofile(request):
     if request.session.has_key('id'):
         id = request.session['id']
+        return render(request, "sendingprofile.html", context = { "title": "Sending Profiles - Human Firewall", "header": "Sending Profiles", "data": SendingProfile.objects.filter(userId=id) })
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def addProfile(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
         if request.method == "POST":
             obj = SendingProfile()
-            flag = True
-            names = ['name', 'from', 'host', 'username', 'password']            
-            for name in names:
-                if not request.POST[name]:
-                    flag = False
-                    break           
-            if flag == True:
-                obj.name = request.POST['name']
-                obj._from = request.POST['from']
-                obj.host = request.POST['host']
-                obj.username = request.POST['username']
-                obj.password = request.POST['password']
-                obj.userId_id = id
-                obj.save()
-                return redirect('/sendingprofile')
-            else:
-                return HttpResponse("Data missing in fields.")
-        return render(request, "sendingprofile.html", context = { "title": "Sending Profiles - Human Firewall", "header": "Sending Profiles" })
+            obj.name = request.POST['profilename']
+            obj.email_from = request.POST['profilefrom']
+            obj.host = request.POST['profilehost']
+            obj.username = request.POST['profileusername']
+            obj.password = request.POST['profilepassword']
+            obj.userId_id = id
+            obj.save()
+            return render(request, "sendingprofile.html", context = { "title": "Sending Profiles - Human Firewall", "header": "Sending Profiles", "data": SendingProfile.objects.filter(userId=id) })
+        return redirect("/sendingprofile")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def getProfileDetails(request, pid):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        record = SendingProfile.objects.get(id=pid)
+        profiledetails = [record.name, record.email_from, record.host, record.username, record.password]
+        return HttpResponse(json.dumps(profiledetails))
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def editProfile(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
