@@ -38,12 +38,14 @@ class CampaignResults(TimeStampMixin):
     userEmailStatus = models.BooleanField(default=False)
     image_id = models.CharField(max_length=50, unique=True)
 
+
 class UserGroups(TimeStampMixin):
     groupId = models.AutoField(primary_key=True)
     groupName = models.CharField(max_length=50, unique=True)
     totalUsers = models.IntegerField(default=0)
     users = models.ManyToManyField(Targets, through='GroupedUsers')
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
+
 
 class GroupedUsers(TimeStampMixin):
     class Meta:
@@ -70,7 +72,7 @@ class LandingPage(TimeStampMixin):
 class SendingProfile(TimeStampMixin):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
-    _from = models.EmailField(max_length=100, db_column='from')
+    email_from = models.EmailField(max_length=100, db_column='from')
     host = models.CharField(max_length=100)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=512)

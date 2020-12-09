@@ -6,32 +6,23 @@
             <div class="col-12 text-center">
                 <div class="sending-profiles">
                     <div id="profiles-table" class="profiles-table">
-                        <div class="profile 1">
-                            <div class="profile-main">
-                                <b class="name">Sending Profile 1</b>
-                                <i class="from">navneeth.krishnan@st.niituniversity.in</i>
-                            </div>
-                            <div class="profile-interface"><p class="interface">SMTP</p></div>
-                            <div class="profile-created-on">
-                                <p class="created-date">Dec 12th 2020</p>
-                                <p class="created-time">15:29:04</p>
-                            </div>
-                            <div class="profile-edit-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                            <div class="profile-delete-btn"><a class="options" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
-                        </div>
-                        <div class="profile 2">
-                            <div class="profile-main">
-                                <b class="name">Sending Profile 2</b>
-                                <i class="from">navneeth.krishnan@st.niituniversity.in</i>
-                            </div>
-                            <div class="profile-interface"><p class="interface">SMTP</p></div>
-                            <div class="profile-created-on">
-                                <p class="created-date">December 12th 2020</p>
-                                <p class="created-time">15:29:04</p>
-                            </div>
-                            <div class="profile-edit-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
-                            <div class="profile-delete-btn"><a class="options" onclick="deleteUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
-                        </div>
+                        {% if data.values.count > 0 %}
+                            {% for d in data.values %}
+                                <div class="profile {{ d.id }}">
+                                    <div class="profile-main">
+                                        <b class="name">{{ d.name }}</b>
+                                        <i class="from">{{ d.email_from }}</i>
+                                    </div>
+                                    <div class="profile-interface"><p class="interface">SMTP</p></div>
+                                    <div class="profile-created-on">
+                                        <p class="created-date">{{ d.modified_on|date }}</p>
+                                        <p class="created-time">{{ d.modified_on|time }}</p>
+                                    </div>
+                                    <div class="profile-edit-btn"><a class="options" onclick="editProfile(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                                    <div class="profile-delete-btn"><a class="options" onclick="deleteProfile(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         <form id="profile-form-new" method="POST" action="/sendingprofile/addprofile" hidden>
                             {% csrf_token %}
                         </form>
@@ -64,6 +55,7 @@
                     <label for="profilepassword">Password:</label>
                     <input type="password" id="new-password" class="password form-control" name="profilepassword" placeholder="Password" required/>
                 </div>
+                <button type="button" class="profile-test-email btn btn-primary" onclick="sendTestEmail();"><ion-icon name="mail-outline"></ion-icon> Test Email</button>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">Close</button>
