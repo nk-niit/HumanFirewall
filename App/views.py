@@ -334,7 +334,6 @@ def createFile(op, filename, content):
     f.write(content)
     f.close()
 
-
 def readFile(filename):
     filename = filename + ".html"
     current_dir = os.path.dirname(__file__)
