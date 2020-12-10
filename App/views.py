@@ -415,7 +415,7 @@ def manipulateContent(content):
     forms = soup.find_all("form")
     for form in forms:
         form.append("{% csrf_token %}")
-        form['action'] = "/landingpage/serve/{{ fname }}{{ trackid }}"
+        form['action'] = "/landingpage/serve/{{ fname }}/{{ trackid }}"
         input_elements = form.find_all("input")
         for input_element in input_elements:
             if input_element['type'] == "text":
@@ -438,7 +438,6 @@ def addPage(request):
             obj.userId_id = id
             obj.save()
             return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages", "data": LandingPage.objects.filter(userId=id) })
-            return HttpResponse(manipulated_content)
         return redirect("/landingpage")
     else:
         messages.info(request, 'Kindly Login To Continue')
