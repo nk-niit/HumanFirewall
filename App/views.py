@@ -20,7 +20,7 @@ def dashboard(request):
         return redirect("login")
 
 
-def runcampaign(targets,sendprofile,emaildata, campname):
+def runcampaign(targets,sendprofile,emaildata, campname, landfilename):
     my_host = sendprofile[1].split(':')[0]
     my_port = int(sendprofile[1].split(':')[1])
     my_username = sendprofile[2]
@@ -35,10 +35,10 @@ def runcampaign(targets,sendprofile,emaildata, campname):
         subject, from_email, to = emaildata[0], sendprofile[0], value
         text_content = 'Random'
         randomise = uuid.uuid4().hex
+        landpagetrack = '<a href = "http://firewallapp.herokuapp.com/landingpage/serve/' + landfilename + '/' + randomise + '" >Link</a>'
         imageurl = '<img src = "http://firewallapp.herokuapp.com/image_load/'+randomise+'" width="0px" height="0px"/>'
         splitbodypart = emaildata[1].split('</body>')
-        bodypart = splitbodypart[0]+imageurl+"</body>"+splitbodypart[1]
-        print(bodypart)
+        bodypart = splitbodypart[0]+imageurl + landpagetrack +"</body>"+splitbodypart[1]
         msg = EmailMultiAlternatives(subject, text_content, from_email, [to], connection=connection)
         msg.attach_alternative(bodypart, "text/html")
         msg.send()
@@ -48,6 +48,32 @@ def runcampaign(targets,sendprofile,emaildata, campname):
         objcampresult.user_id = key
         objcampresult.image_id = randomise
         objcampresult.save()
+
+
+def servepage(request, fname, trackid):  
+    ida = CampaignResults.objects.get(image_id = trackid)
+    ida.userClickStatus = True
+    ida.save()
+    soup = BeautifulSoup(readFile(fname), 'lxml')
+    forms = soup.find_all("form")
+    for form in forms:
+        form['action'] = "/landingpage/serve/getcreds/" + trackid
+    createFile("w", fname, str(soup))
+    print("User Clicked on the link")
+    return render(request, filename)
+
+
+def getCredentials(request):
+    try:
+        if request.method == "POST":
+            print("\n\n=================================================================================")
+            print(request.POST['uname'])
+            print(request.POST['upass'])
+            print("=================================================================================\n\n")
+            return HttpResponse("Credentials Captured.")
+    except Exception as e:
+        print("Error")
+    return redirect("/landingpage")
 
 
 def campaign(request):
@@ -78,7 +104,7 @@ def campaign(request):
             campaign_obj.group = objug.groupId
             campaign_obj.userId_id = id
             campaign_obj.save()
-            runcampaign(targetsemail, profile, emaildata, campaign_name)
+            runcampaign(targetsemail, profile, emaildata, campaign_name, objl.filename)
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
         return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
     else:
@@ -400,7 +426,6 @@ def manipulateContent(content):
     forms = soup.find_all("form")
     for form in forms:
         form.append("{% csrf_token %}")
-        form['action'] = "/landingpage/serve/getcreds"
         input_elements = form.find_all("input")
         for input_element in input_elements:
             if input_element['type'] == "text":
@@ -486,19 +511,6 @@ def previewPage(request, fname):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
-
-
-def getCredentials(request):
-    try:
-        if request.method == "POST":
-            print("\n\n=================================================================================")
-            print(request.POST['uname'])
-            print(request.POST['upass'])
-            print("=================================================================================\n\n")
-            return HttpResponse("Credentials Captured.")
-    except Exception as e:
-        print("Error")
-    return redirect("/landingpage")
 
 
 def accountsettings(request):

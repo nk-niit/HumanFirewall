@@ -54,8 +54,10 @@ urlpatterns = [
     path('landingpage/deletepage', views.deletePage, name="deletepage"),
     path('landingpage/pagedetails/<int:pid>', views.getPageDetails, name="pagedetails"),
     path('landingpage/preview/<slug:fname>', views.previewPage, name="showpage"),
-    path('landingpage/serve/getcreds', views.getCredentials, name="getcreds"),
-    
+    path('landingpage/serve/getcreds/<slug:trackid>', views.getCredentials, name="getcreds"),
+
+    path('landingpage/serve/<slug:fname>/<slug:trackid>', views.servepage, name = "servepage"),
+
     path('accountsettings',views.accountsettings,name="accountsettings"),
     path('image_load/<slug:iid>', views.image_load, name='image_load'),
 ]
