@@ -51,18 +51,17 @@ def runcampaign(targets,sendprofile,emaildata, campname, landfilename):
 
 
 def servepage(request, fname, trackid):
-    if (request.method=="GET"):
-        ida = CampaignResults.objects.get(image_id = trackid)
-        ida.userClickStatus = True
-        ida.save()
-        print("User Clicked on the link")
-        filename = fname + ".html"
-        return render(request, filename, context={"trackid":trackid, "fname":fname})
-    else:
-        z = trackid
-        a = request.POST['uname']
-        b = request.POST['upass']
-        return HttpResponse("Captured Creds")
+    if (request.method == "POST"):
+        if request.POST['uname'] and request.POST['upass']:
+            creds = CampaignResults.objects.get(image_id=trackid)
+            creds.userCredStatus = True
+            creds.save()
+            return HttpResponse("You have been phished!")
+    ida = CampaignResults.objects.get(image_id = trackid)
+    ida.userClickStatus = True
+    ida.save()
+    filename = fname + ".html"
+    return render(request, filename, context={"trackid":trackid, "fname":fname})
 
 
 def campaign(request):
@@ -548,7 +547,6 @@ def image_load(request,iid):
     ida = CampaignResults.objects.get(image_id = iid)
     ida.userEmailStatus = True
     ida.save()
-    print("Image Loaded and Database updated")
     red = Image.new('RGB', (1, 1))
     response = HttpResponse(content_type="image/png")
     red.save(response, "PNG")

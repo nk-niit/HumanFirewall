@@ -36,6 +36,7 @@ class CampaignResults(TimeStampMixin):
     user = models.ForeignKey(Targets, on_delete=models.CASCADE)
     userClickStatus = models.BooleanField(default=False)
     userEmailStatus = models.BooleanField(default=False)
+    userCredStatus = models.BooleanField(default=False)
     image_id = models.CharField(max_length=50, unique=True)
 
 
