@@ -196,7 +196,7 @@ async function editUser(element) {
     if ($('#user-form-edit').length == 0) {
         const current_user = element.parentElement;
         const uid = current_user.className.split(" ")[1];
-        const response = await fetch(`/usergroups/user/${parseInt(uid)}`);
+        const response = await fetch(`/usergroups/userdetails/${parseInt(uid)}`);
         const json_response = await response.json();
         $('#user-form-new .user-input, #user-form-new hr').remove();
         const new_element = document.getElementById('user-form-new').cloneNode(true);
@@ -228,7 +228,7 @@ async function editGroup(element) {
     if ($('#group-form-edit').length == 0) {
         const current_group = element.parentElement;
         const gid = current_group.className.split(" ")[1];
-        const response = await fetch(`/usergroups/group/${parseInt(gid)}`);
+        const response = await fetch(`/usergroups/groupdetails/${parseInt(gid)}`);
         const json_response = await response.json();
         let usercount;
         if (json_response[1] > 3) {
@@ -484,7 +484,7 @@ async function editPage(element) {
     if ($('#page-form-edit').length == 0) {
         const current_page = element.parentElement;
         const pid = current_page.className.split(" ")[1];
-        const response = await fetch(`/landingpage/page/${parseInt(pid)}`);
+        const response = await fetch(`/landingpage/pagedetails/${parseInt(pid)}`);
         const json_response = await response.json();
         $('#page-form-new .page-input').remove();
         const new_element = document.getElementById('page-form-new').cloneNode(true);
@@ -623,7 +623,7 @@ async function editProfile(element) {
     if ($('#profile-form-edit').length == 0) {
         const current_profile = element.parentElement;
         const pid = current_profile.className.split(" ")[1];
-        const response = await fetch(`/sendingprofile/profile/${parseInt(pid)}`);
+        const response = await fetch(`/sendingprofile/profiledetails/${parseInt(pid)}`);
         const json_response = await response.json();
         $('#profile-form-new .profile-input').remove();
         const new_element = document.getElementById('profile-form-new').cloneNode(true);

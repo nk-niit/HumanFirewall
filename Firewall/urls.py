@@ -36,8 +36,8 @@ urlpatterns = [
     path('usergroups/editgroup', views.editGroup, name="editgroup"),
     path('usergroups/deleteuser', views.deleteUser, name="deleteuser"),
     path('usergroups/deletegroup', views.deleteGroup, name="deletegroup"),
-    path('usergroups/user/<int:uid>', views.getUserDetails, name="userdetails"),
-    path('usergroups/group/<int:gid>', views.getGroupDetails, name="groupdetails"),
+    path('usergroups/userdetails/<int:uid>', views.getUserDetails, name="userdetails"),
+    path('usergroups/groupdetails/<int:gid>', views.getGroupDetails, name="groupdetails"),
     path('usergroups/getusers', views.getUsersA, name="getusersA"),
     path('usergroups/getusers/<int:gid>', views.getUsersE, name="getusersE"),
     
@@ -46,13 +46,15 @@ urlpatterns = [
     path('sendingprofile',views.sendingprofile,name="sendingprofile"),
     path('sendingprofile/addprofile', views.addProfile, name="addprofile"),
     path('sendingprofile/editprofile', views.editProfile, name="editprofile"),
-    path('sendingprofile/profile/<int:pid>', views.getProfileDetails, name="profiledetails"),
+    path('sendingprofile/profiledetails/<int:pid>', views.getProfileDetails, name="profiledetails"),
     
     path('landingpage',views.landingpage,name="landingpage"),
     path('landingpage/addpage', views.addPage, name="addpage"),
     path('landingpage/editpage', views.editPage, name="editpage"),
     path('landingpage/deletepage', views.deletePage, name="deletepage"),
-    path('landingpage/page/<int:pid>', views.getPageDetails, name="pagedetails"),
+    path('landingpage/pagedetails/<int:pid>', views.getPageDetails, name="pagedetails"),
+    path('landingpage/preview/<slug:fname>', views.previewPage, name="showpage"),
+    path('landingpage/serve/getcreds', views.getCredentials, name="getcreds"),
     
     path('accountsettings',views.accountsettings,name="accountsettings"),
     path('image_load/<slug:iid>', views.image_load, name='image_load'),
