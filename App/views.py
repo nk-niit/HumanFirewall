@@ -81,14 +81,14 @@ def campaign(request):
             obje = EmailTemp.objects.get(tempName=email_template)
             emaildata = [obje.subject,obje.text_html]
             objl = LandingPage.objects.get(name=landing_page)
-            # campaign_obj = Campaign()
-            # campaign_obj.campaignName = campaign_name
-            # campaign_obj.emailTemplate = obje.tempId
-            # campaign_obj.landingPage = objl.id
-            # campaign_obj.sendingProfile = objs.id
-            # campaign_obj.group = objug.groupId
-            # campaign_obj.userId_id = id
-            # campaign_obj.save()
+            campaign_obj = Campaign()
+            campaign_obj.campaignName = campaign_name
+            campaign_obj.emailTemplate = obje.tempId
+            campaign_obj.landingPage = objl.id
+            campaign_obj.sendingProfile = objs.id
+            campaign_obj.group = objug.groupId
+            campaign_obj.userId_id = id
+            campaign_obj.save()
             runcampaign(targetsemail, profile, emaildata, campaign_name, objl.filename)
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
         return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
