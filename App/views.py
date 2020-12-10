@@ -7,7 +7,9 @@ from django.core.mail import get_connection, send_mail
 from django.core.mail import EmailMultiAlternatives
 from .models import LandingPage, SendingProfile, Targets, UserGroups, GroupedUsers, EmailTemp, CampaignResults, Campaign
 from PIL import Image
+from bs4 import BeautifulSoup
 import json, uuid, os
+
 
 def dashboard(request):
     if request.session.has_key('id'):
@@ -68,15 +70,16 @@ def campaign(request):
             obje = EmailTemp.objects.get(tempName=email_template)
             emaildata = [obje.subject,obje.text_html]
             objl = LandingPage.objects.get(name=landing_page)
-            campaign_obj = Campaign()
-            campaign_obj.campaignName = campaign_name
-            campaign_obj.emailTemplate = obje.tempId
-            campaign_obj.landingPage = objl.id
-            campaign_obj.sendingProfile = objs.id
-            campaign_obj.group = objug.groupId
-            campaign_obj.userId_id = id
-            campaign_obj.save()
-            runcampaign(targetsemail, profile, emaildata, campaign_name)
+            print(objl.filename)
+            # campaign_obj = Campaign()
+            # campaign_obj.campaignName = campaign_name
+            # campaign_obj.emailTemplate = obje.tempId
+            # campaign_obj.landingPage = objl.id
+            # campaign_obj.sendingProfile = objs.id
+            # campaign_obj.group = objug.groupId
+            # campaign_obj.userId_id = id
+            # campaign_obj.save()
+            #runcampaign(targetsemail, profile, emaildata, campaign_name)
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
         return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
     else:
@@ -91,6 +94,7 @@ def usergroups(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
 
 def addUser(request):
     if request.session.has_key('id'):
@@ -371,6 +375,7 @@ def createFile(op, filename, content):
     f.write(content)
     f.close()
 
+
 def readFile(filename):
     filename = filename + ".html"
     current_dir = os.path.dirname(__file__)
@@ -391,18 +396,35 @@ def deleteFile(filename):
         os.remove(filepath)
 
 
+def manipulateContent(content):
+    soup = BeautifulSoup(content, 'lxml')
+    forms = soup.find_all("form")
+    for form in forms:
+        form.append("{% csrf_token %}")
+        form['action'] = "/landingpage/serve/getcreds"
+        input_elements = form.find_all("input")
+        for input_element in input_elements:
+            if input_element['type'] == "text":
+                input_element['name'] = "uname"
+            elif input_element['type'] == "password":
+                input_element['name'] = "upass"
+    return soup
+
+
 def addPage(request):
     if request.session.has_key('id'):
         id = request.session['id']
         if request.method == "POST":
             obj = LandingPage()
             fname = uuid.uuid4().hex
-            createFile("w+", fname, request.POST['content'])
+            manipulated_content = manipulateContent(request.POST['content'])
+            createFile("w+", fname, str(manipulated_content))
             obj.name = request.POST['pagename']
             obj.filename = fname
             obj.userId_id = id
             obj.save()
             return render(request, "landingpage.html", context = { "title": "Landing Pages - Human Firewall", "header": "Landing Pages", "data": LandingPage.objects.filter(userId=id) })
+            return HttpResponse(manipulated_content)
         return redirect("/landingpage")
     else:
         messages.info(request, 'Kindly Login To Continue')
@@ -455,6 +477,26 @@ def deletePage(request):
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
+
+
+def previewPage(request, fname):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        filename = fname + ".html"
+        return render(request, filename)
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def getCredentials(request):
+    if request.method == "POST":
+        print("\n\n=================================================================================")
+        print(request.POST['uname'])
+        print(request.POST['upass'])
+        print("=================================================================================\n\n")
+        return HttpResponse("Credentials Captured.")
+    return redirect("/landingpage")
 
 
 def accountsettings(request):

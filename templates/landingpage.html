@@ -10,7 +10,7 @@
                         {% for d in data.values %}
                           <div class="page {{ d.id }}">
                               <div class="page-name"><b class="name">{{ d.name }}</b></div>
-                              <div class="page-preview-btn"><a class="options" class="preview" target="_blank" href="{% static 'landingpages/'|add:d.filename|add:'.html' %}" data-toggle="tooltip" data-placement="top" title="Preview"><ion-icon name="scan-outline"></ion-icon></a></div>
+                              <div class="page-preview-btn"><a class="options" class="preview" target="_blank" href="/landingpage/preview/{{ d.filename }}" data-toggle="tooltip" data-placement="top" title="Preview"><ion-icon name="scan-outline"></ion-icon></a></div>
                               <div class="page-edit-btn"><a class="options" onclick="editPage(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
                               <div class="page-delete-btn"><a class="options" onclick="deletePage(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
                               <div class="page-preview"><iframe class="preview" loading="lazy" src="{% static 'landingpages/'|add:d.filename|add:'.html' %}"></iframe></div>
