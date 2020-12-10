@@ -66,7 +66,7 @@ def campaign(request):
                 objt = Targets.objects.get(id=i.user_id)
                 targetsemail[objt.id] = objt.email
             objs = SendingProfile.objects.get(name=sending_profile)
-            profile = [objs._from,objs.host,objs.username,objs.password]
+            profile = [objs.email_from,objs.host,objs.username,objs.password]
             obje = EmailTemp.objects.get(tempName=email_template)
             emaildata = [obje.subject,obje.text_html]
             objl = LandingPage.objects.get(name=landing_page)
@@ -489,12 +489,15 @@ def previewPage(request, fname):
 
 
 def getCredentials(request):
-    if request.method == "POST":
-        print("\n\n=================================================================================")
-        print(request.POST['uname'])
-        print(request.POST['upass'])
-        print("=================================================================================\n\n")
-        return HttpResponse("Credentials Captured.")
+    try:
+        if request.method == "POST":
+            print("\n\n=================================================================================")
+            print(request.POST['uname'])
+            print(request.POST['upass'])
+            print("=================================================================================\n\n")
+            return HttpResponse("Credentials Captured.")
+    except Exception as e:
+        print("Error")
     return redirect("/landingpage")
 
 
