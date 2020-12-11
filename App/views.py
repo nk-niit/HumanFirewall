@@ -120,7 +120,7 @@ def addCampaign(request):
             campaign_obj.userId_id = id
             campaign_obj.save()
             runcampaign(targetsemail, profile, emaildata, campaign_name, objl.filename)
-            return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
+            return redirect("/dashboard")
         return redirect("/campaign")
     else:
         messages.info(request, 'Kindly Login To Continue')
