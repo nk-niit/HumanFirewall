@@ -102,6 +102,40 @@ img {
     text-align: center;
     box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
 }
+.completed-campaigns {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 500px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
+    margin-top: -20px;
+}
+.running-campaigns {
+    position: relative;
+    margin-bottom: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 240px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
+    margin-top: -20px;
+}
+.scheduled-campaigns {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 240px;
+    border-radius: 5px;
+    text-align: center;
+    box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
+    margin-top: -20px;
+}
 .container-fluid.content .btn.add {
     font-family: 'Montserrat';
     position: absolute;
@@ -110,6 +144,14 @@ img {
     left: 0;
     background-color: #fff;
     color: #0C5DF4;
+}
+.container-fluid.content .btn.add.campaign {
+    font-family: 'Montserrat';
+    position: relative;
+    margin: 15px auto;
+    width: 97.5%;
+    background-color: #0C5DF4;
+    color: #fff;
 }
 .container-fluid.content .btn.add:hover {
     color: #fff;
@@ -123,12 +165,30 @@ img {
     overflow-y: auto;
     overflow-x: hidden;
 }
-.landing-pages .pages-table {
+.completed-campaigns .completed-campaigns-table, .running-campaigns .running-campaigns-table, .scheduled-campaigns .scheduled-campaigns-table  {
+    display: block;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.running-campaigns-table .no-data, .completed-campaigns-table .no-data, .scheduled-campaigns-table .no-data, .user-groups-table .no-data, .templates-table .no-data, .profiles-table .no-data, .pages-table .no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+.running-campaigns-table .no-data b, .completed-campaigns-table .no-data b, .scheduled-campaigns-table .no-data b, .user-groups-table .no-data b, .templates-table .no-data b, .profiles-table .no-data b, .pages-table .no-data b {
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+.landing-pages .pages-table, .email-templates .templates-table {
     padding: 15px 0;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-column-gap: 10px;
-    grid-row-gap: 30px;
+    grid-row-gap: 10px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -136,12 +196,19 @@ img {
     padding: 15px 0;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-column-gap: 10px;
     grid-row-gap: 10px;
     overflow-y: auto;
     overflow-x: hidden;
 }
-.user-groups .user-groups-table .user, .user-groups .user-groups-table .user-input {
+.user-groups-table .user, .user-groups-table .user-input {
+    display: flex;
+    position: relative;
+    width: 95%;
+    height: 60px;
+    text-align: left;
+    margin: 10px auto;
+}
+.completed-campaigns-table .completed-campaign, .running-campaigns-table .running-campaign, .scheduled-campaigns-table .scheduled-campaign {
     display: flex;
     position: relative;
     width: 95%;
@@ -157,7 +224,7 @@ img {
     text-align: left;
     margin: 10px auto;
 }
-.pages-table .page, .pages-table .page-input, .profiles-table .profile, .profiles-table .profile-input {
+.pages-table .page, .pages-table .page-input, .profiles-table .profile, .profiles-table .profile-input, .templates-table .template, .templates-table .template-input {
     display: flex;
     position: relative;
     width: 100%;
@@ -218,8 +285,14 @@ img {
     top: 5%;
     left: 5%;
 }
-.profiles-table .profile-input .profile-details .name, .profiles-table .profile-input .profile-details .from {
-    margin: 5px 0;
+.templates-table .template-input .template-details {
+    position: absolute;
+    width: 35%;
+    top: 5%;
+    left: 5%;
+}
+.profiles-table .profile-input .profile-details .name, .profiles-table .profile-input .profile-details .from, .templates-table .template-input .template-details .name, .templates-table .template-input .template-details .subject {
+    margin: 5px;
 }
 .user-groups-table .user .user-personal .name {
     white-space: nowrap;
@@ -270,12 +343,28 @@ img {
     top: 25%;
     width: 15%;
 }
+.completed-campaigns-table .completed-campaign .campaign-created-on, .running-campaigns-table .running-campaign .campaign-created-on, .scheduled-campaigns-table .scheduled-campaign .campaign-created-on {
+    position: absolute;
+    vertical-align: middle;
+    left: 40%;
+    top: 25%;
+    width: 20%;
+    overflow: hidden;
+}
 .profiles-table .profile .profile-created-on {
     position: absolute;
     vertical-align: middle;
     right: 20%;
     top: 25%;
     width: 20%;
+    overflow: hidden;
+}
+.templates-table .template .template-created-on {
+    position: absolute;
+    vertical-align: middle;
+    right: 30%;
+    top: 25%;
+    width: 25%;
     overflow: hidden;
 }
 .user-groups-table .group .group-user-count {
@@ -319,12 +408,28 @@ img {
     text-align: center;
     overflow: hidden;
 }
+.completed-campaigns-table .completed-campaign .campaign-name, .running-campaigns-table .running-campaign .campaign-name, .scheduled-campaigns-table .scheduled-campaign .campaign-name {
+    position: absolute;
+    left: 5%;
+    top: 30%;
+    vertical-align: middle;
+    width: 30%;
+    overflow: hidden;
+}
 .profiles-table .profile .profile-main {
     position: absolute;
     left: 5%;
     top: 20%;
     vertical-align: middle;
     width: 35%;
+    overflow: hidden;
+}
+.templates-table .template .template-main {
+    position: absolute;
+    left: 5%;
+    top: 20%;
+    vertical-align: middle;
+    width: 30%;
     overflow: hidden;
 }
 .pages-table .page-input .page-name {
@@ -336,10 +441,22 @@ img {
     text-align: center;
     overflow: hidden;
 }
-.user-groups-table .group .group-name .name, .pages-table .page .page-name .name, .profiles-table .profile .profile-main .name {
+.user-groups-table .group .group-name .name, .pages-table .page .page-name .name, .completed-campaigns-table .completed-campaign .campaign-name .name, .running-campaigns-table .running-campaign .campaign-name .name, .scheduled-campaigns-table .scheduled-campaign .campaign-name .name {
     line-height: normal;
     font-size: 17px;
     font-family: 'Roboto', sans-serif;
+    white-space: nowrap;
+}
+.profiles-table .profile .profile-main .name, .templates-table .template .template-main .name {
+    margin: 0;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    white-space: nowrap;
+}
+.profiles-table .profile .profile-main .from, .templates-table .template .template-main .subject {
+    margin: 0;
+    font-style: italic;
     white-space: nowrap;
 }
 .user-groups-table .group-input .group-name {
@@ -374,7 +491,42 @@ img {
     text-align: center;
     overflow: hidden;
 }
-.pages-table .page-input .content-status .saved {
+.templates-table .template-input .content-status {
+    position: absolute;
+    width: 20%;
+    top: 35%;
+    right: 30%;
+    vertical-align: middle;
+    text-align: center;
+    overflow: hidden;
+}
+.completed-campaigns-table .completed-campaign .campaign-status {
+    position: absolute;
+    top: 40%;
+    right: 28%;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: green;
+}
+.running-campaigns-table .running-campaign .campaign-status {
+    position: absolute;
+    top: 40%;
+    right: 28%;
+    width: 15px;
+    height: 15px;
+}
+.scheduled-campaigns-table .scheduled-campaign .campaign-status {
+    position: absolute;
+    top: 35%;
+    right: 28%;
+    width: fit-content;
+}
+.scheduled-campaigns-table .scheduled-campaign .campaign-status ion-icon {
+    font-size: 20px;
+    color: grey;
+}
+.pages-table .page-input .content-status .saved, .templates-table .template-input .content-status .saved {
     line-height: normal;
     font-size: 17px;
     font-style: italic;
@@ -416,6 +568,14 @@ img {
     padding: 6px 5px;
     width: fit-content;
 }
+.templates-table .template-input .btn.btn-primary {
+    position: absolute;
+    font-family: 'Poppins', sans-serif;
+    right: 25%;
+    top: 25%;
+    padding: 6px 5px;
+    width: fit-content;
+}
 .user-groups-table .group .group-edit-btn {
     top: 5%;
     font-size: 20px;
@@ -449,7 +609,7 @@ img {
     font-family: 'Roboto', sans-serif;
     white-space: nowrap;
 }
-.profiles-table .profile .profile-interface .interface, .profiles-table .profile .profile-created-on .created-date, .profiles-table .profile .profile-created-on .created-time {
+.profiles-table .profile .profile-interface .interface, .profiles-table .profile .profile-created-on .created-date, .profiles-table .profile .profile-created-on .created-time, .templates-table .template .template-created-on .created-date, .templates-table .template .template-created-on .created-time, .completed-campaigns-table .completed-campaign .campaign-created-on .created-date, .completed-campaigns-table .completed-campaign .campaign-created-on .created-time, .running-campaigns-table .running-campaign .campaign-created-on .created-date, .running-campaigns-table .running-campaign .campaign-created-on .created-time, .scheduled-campaigns-table .scheduled-campaign .campaign-created-on .created-date, .scheduled-campaigns-table .scheduled-campaign .campaign-created-on .created-time {
     margin: 0;
     line-height: normal;
     font-size: 15px;
@@ -486,11 +646,29 @@ img {
     vertical-align: middle;
     bottom: 0;
 }
+.completed-campaigns-table .completed-campaign .campaign-details-btn, .running-campaigns-table .running-campaign .campaign-details-btn, .scheduled-campaigns-table .scheduled-campaign .campaign-details-btn {
+    top: 5%;
+    font-size: 20px;
+    position: absolute;
+    right: 15%;
+    line-height: 60px;
+    vertical-align: middle;
+    bottom: 0;
+}
 .user-groups-table .user .user-delete-btn {
     top: 5%;
     font-size: 20px;
     position: absolute;
     right: 2%;
+    line-height: 60px;
+    vertical-align: middle;
+    bottom: 0;
+}
+.completed-campaigns-table .completed-campaign .campaign-delete-btn, .running-campaigns-table .running-campaign .campaign-complete-btn, .scheduled-campaigns-table .scheduled-campaign .campaign-runnow-btn {
+    top: 5%;
+    font-size: 20px;
+    position: absolute;
+    right: 5%;
     line-height: 60px;
     vertical-align: middle;
     bottom: 0;
@@ -528,6 +706,20 @@ img {
     top: 30%;
     font-size: 20px;
     right: 2%;
+    vertical-align: middle;
+}
+.templates-table .template .template-edit-btn {
+    position: absolute;
+    top: 30%;
+    font-size: 20px;
+    right: 15%;
+    vertical-align: middle;
+}
+.templates-table .template .template-delete-btn {
+    position: absolute;
+    top: 30%;
+    font-size: 20px;
+    right: 5%;
     vertical-align: middle;
 }
 .user-groups-table .user-input .user-cancel-btn, .user-groups-table .group-input .group-cancel-btn {
@@ -578,7 +770,19 @@ img {
     right: 10%;
     font-size: 25px;
 }
+.templates-table .template-input .template-confirm-btn {
+    position: absolute;
+    top: 30%;
+    right: 12%;
+    font-size: 25px;
+}
 .profiles-table .profile-input .profile-cancel-btn {
+    position: absolute;
+    top: 30%;
+    right: 2%;
+    font-size: 25px;
+}
+.templates-table .template-input .template-cancel-btn {
     position: absolute;
     top: 30%;
     right: 2%;
@@ -587,10 +791,10 @@ img {
 .pages-table .page-input .page-confirm-btn .options ion-icon {
     font-size: 15px;
 }
-.user-groups-table .user-input .user-cancel-btn .options, .user-groups-table .group-input .group-cancel-btn .options, .profiles-table .profile-input .profile-cancel-btn .options {
+.user-groups-table .user-input .user-cancel-btn .options, .user-groups-table .group-input .group-cancel-btn .options, .profiles-table .profile-input .profile-cancel-btn .options, .templates-table .template-input .template-cancel-btn .options {
     color: red;
 }
-.user-groups-table .user-input .user-confirm-btn .options, .user-groups-table .group-input .group-confirm-btn .options, .profiles-table .profile-input .profile-confirm-btn .options {
+.user-groups-table .user-input .user-confirm-btn .options, .user-groups-table .group-input .group-confirm-btn .options, .profiles-table .profile-input .profile-confirm-btn .options, .templates-table .template-input .template-confirm-btn .options {
     color: green;
 }
 .pages-table .page-input .page-confirm-btn .options, .pages-table .page-input .page-cancel-btn .options {
@@ -647,7 +851,7 @@ img {
 .modal-body .chips-container .chip .closebtn:hover {
     color: #000;
 }
-.modal-body .modal-page-content-input {
+.modal-body .modal-page-content-input, .modal-body .modal-template-content-input {
     width: 100%;
     height: 100%;
     padding: 5px;
@@ -656,9 +860,63 @@ img {
 .modal-body .profile-host, .modal-body .profile-username, .modal-body .profile-password {
     margin-bottom: 20px;
 }
+.modal-body .campaign-name, .modal-body .campaign-et, .modal-body .campaign-lp, .modal-body .campaign-sp {
+    margin-bottom: 10px;
+}
+.modal-body .campaign-grp {
+    margin-bottom: 0;
+}
 .modal-body .profile-test-email {
     position: absolute;
     bottom: 10px;
+}
+.modal-footer .btn.btn-secondary.campaign-schedule, .modal-footer .btn.btn-primary.campaign-run, .modal-footer .btn.btn-secondary.campaign-close {
+    margin-top: 0;
+}
+.modal-footer .btn.btn-secondary.campaign-schedule {
+    position: absolute;
+    left: 15px;
+}
+.modal-footer .btn.btn-secondary.campaign-schedule ion-icon, .modal-footer .btn.btn-primary.campaign-run ion-icon {
+    font-size: 15px;
+}
+.graphical-details {
+    position: relative;
+    height: 150px;
+    border-radius: 5px;
+    box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
+    margin: 20px 0;
+}
+.graphical-details .campaign-header {
+    left: 15px;
+    top: 15px;
+}
+.graphical-details .campaign-stats {
+    margin-top: 5px;
+}
+.graphical-details .campaign-stats .progress {
+    margin: 10px 15px;
+    height: 30%;
+}
+.graphical-details .campaign-header .title {
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    border-bottom: 1px solid;
+}
+.graphical-details .campaign-header .status {
+    margin-left: 10px;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    color: green;
+}
+.graphical-details .campaign-stats .progress-bar-header ion-icon {
+    position: relative;
+    top: 5px;
+    font-size: 20px;
+}
+.graphical-details .campaign-stats .progress-bar-header b {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
 }
 
 
@@ -680,6 +938,11 @@ img {
 #group-form-new hr {
     margin-left: 0;
     width: 100%;
+    transition: 0.5s;
+}
+#completed-campaigns-table hr, #running-campaigns-table hr, #scheduled-campaigns-table hr {
+    margin: auto;
+    width: 90%;
     transition: 0.5s;
 }
 #main .navigation:hover ~ .container-fluid.content {

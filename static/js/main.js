@@ -473,10 +473,15 @@ function addPage() {
     }
 }
 
-function saveHTMLContent() {
+function savePageHTMLContent() {
     html_content = $('#modal-page-content-input').val();
-    $('#add-content').modal("hide");
-    $('.pages-table .page-input .btn.btn-primary').replaceWith(`<div class="content-status"><p class="saved"><ion-icon name="bookmark-outline"></ion-icon> Saved</p></div>`);
+    if (html_content != "") {
+        $('#add-content').modal("hide");
+        $('.pages-table .page-input .btn.btn-primary').replaceWith(`<div class="content-status"><p class="saved"><ion-icon name="bookmark-outline"></ion-icon> Saved</p></div>`);
+    }
+    else {
+        alert("Please add HTML content for your page.");
+    }
 }
 
 async function editPage(element) {
@@ -705,7 +710,104 @@ function cancelAddProfileForm() {
 
 // Email Templates (Start) =========================================================================================================
 function addTemplate() {
-    
+    if ($('#template-form-new .template-input').length == 0) {
+        const form = document.getElementById('template-form-new');
+        form.hidden = false;
+        form.innerHTML += `<div class="template-input">
+                                <div class="template-details form-group">
+                                    <input type="text" id="new-name" class="name form-control" name="templatename" placeholder="Template name" required/>
+                                    <input type="text" id="new-subject" class="subject form-control" name="templatesubject" placeholder="Subject" required/>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="$('#add-content').modal()">Add HTML</button>
+                                <div class="template-confirm-btn"><a class="options" onclick="submitAddTemplateForm();" data-toggle="tooltip" data-placement="top" title="Confirm"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                <div class="template-cancel-btn"><a class="options" onclick="cancelAddTemplateForm();" data-toggle="tooltip" data-placement="top" title="Cancel"><ion-icon name="close-outline"></ion-icon></a></div>
+                            </div>`;
+        $('.options').tooltip({ delay: { show: 200, hide: 0 } });
+        $('#new-name').focus();
+    }
+    else {
+        $('#new-name').focus();
+    }
 }
 
+function saveTemplateHTMLContent() {
+    html_content = $('#modal-template-content-input').val();
+    console.log(html_content);
+    if (html_content != "") {
+        $('#add-content').modal("hide");
+        $('.templates-table .template-input .btn.btn-primary').replaceWith(`<div class="content-status"><p class="saved"><ion-icon name="bookmark-outline"></ion-icon> Saved</p></div>`);
+    }
+    else {
+        alert("Please add HTML content for your template.");
+    }
+}
+
+function submitAddTemplateForm() {
+    const template_name = $('#new-name').val();
+    const template_subject = $('#new-subject').val();
+    if (template_name != "" && template_subject != "" && html_content != "") {
+        const form = document.getElementById('template-form-new');
+        const element = document.createElement("textarea");
+        element.name = "templatecontent";
+        element.value = html_content;
+        element.hidden = true;
+        form.appendChild(element);
+        form.submit();
+        $('#template-form-new .template-input').remove();
+        form.hidden = true;
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");   
+    }
+}
+
+function cancelAddTemplateForm() {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    $('#template-form-new .template-input').remove();
+    document.getElementById('template-form-new').hidden = true;
+}
 // Email Templates (End) ===========================================================================================================
+
+
+
+// Campaigns (Start) ===============================================================================================================
+function runCampaign() {
+    const campaign_name = $('#new-name').val();
+    const email_template = $('#new-emailtemp').val();
+    const landing_page = $('#new-landpage').val();
+    const sending_profile = $('#new-sendprofile').val();
+    const group = $('#new-group').val();
+    if (campaign_name != "" && email_template != "" && landing_page != "" && sending_profile != "" && group != "") {
+        const form = document.getElementById('campaign-form-new');
+        const flag = confirm("The campaign is about to run with the applied configurations. Please confirm your action.");
+        if (flag) {
+            form.submit();
+        }
+    }
+    else {
+        $('[data-toggle="tooltip"]').tooltip("hide");
+        alert("One or more fields are empty. Please fill them to confirm.");   
+    }
+}
+
+async function completeCampaign(element) {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    const flag = confirm("You are about to mark this campaign as complete. All the processes will be stopped. Please confirm your action.");
+    if (flag) {
+        const current_running_campaign = element.parentElement;
+        const cid = current_running_campaign.className.split(" ")[1];
+        const form = document.getElementById('running-campaign-form');
+        $('#running-campaign-form .rc-form-data').val(cid);
+        form.action += "/complete";
+        form.submit();
+    }
+}
+// Campaigns (End) =================================================================================================================
+
+
+
+// Dashboard (Start) ===============================================================================================================
+
+
+// Dashboard (End) =================================================================================================================

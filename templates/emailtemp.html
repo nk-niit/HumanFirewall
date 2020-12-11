@@ -5,9 +5,50 @@
         <div class="row">
             <div class="col-12 text-center">
                 <div class="email-templates">
-                    <button class="btn add">+&nbsp; Email Template</button>
+                    <div id="templates-table" class="templates-table">
+                        {% if data.values.count > 0 %}
+                            {% for d in data.values %}
+                                <div class="template {{ d.tempId }}">
+                                    <div class="template-main">
+                                        <p class="name">{{ d.tempName }}</p>
+                                        <p class="subject">{{ d.subject }}</p>
+                                    </div>
+                                    <div class="template-created-on">
+                                        <p class="created-date">{{ d.modified_on|date }}</p>
+                                        <p class="created-time">{{ d.modified_on|time }}</p>
+                                    </div>
+                                    <div class="template-edit-btn"><a class="options" onclick="editTemplate(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Edit"><ion-icon name="pencil-outline"></ion-icon></a></div>
+                                    <div class="template-delete-btn"><a class="options" onclick="deleteTemplate(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <form id="template-form-new" method="POST" action="/emailtemp/addtemplate" hidden>
+                            {% csrf_token %}
+                        </form>
+                    </div>
+                    <button class="btn add" onclick="addTemplate();">+&nbsp; Email Template</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="add-content" tabindex="-1" role="dialog" aria-labelledby="add-content-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="add-content-title">Add HTML Code</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="modal-template-content-input" class="form-control modal-template-content-input" placeholder="Type / Paste your HTML code here"></textarea>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal();">Close</button>
+              <button type="button" class="btn btn-primary" onclick="saveTemplateHTMLContent();">Save</button>
+            </div>
+          </div>
         </div>
     </div>
 

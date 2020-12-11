@@ -2,48 +2,152 @@
 {% block content %}
     <div class="container-fluid content">
         <div class="row">
-            <div class="col-6 form-input">
-                <form method="post" id="form" action="campaign">
+            <div class="col-6 text-center">
+                <div class="completed-campaigns">
+                    <div id="completed-campaigns-table" class="completed-campaigns-table">
+                        {% if completed_campaign_data.values.count > 0 %}
+                            {% for d in completed_campaign_data.values %}
+                                <div class="completed-campaign {{ d.campId }}">
+                                    <div class="campaign-name"><b class="name">{{ d.campaignName }}</b></div>
+                                    <div class="campaign-created-on">
+                                        <p class="created-date">{{ d.modified_on|date }}</p>
+                                        <p class="created-time">{{ d.modified_on|time }}</p>
+                                    </div>
+                                    <span class="campaign-status" data-toggle="tooltip" data-placement="top" title="Complete"></span>
+                                    <div class="campaign-details-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="More Details"><ion-icon name="document-text-outline"></ion-icon></a></div>
+                                    <div class="campaign-delete-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Delete"><ion-icon name="trash-outline"></ion-icon></a></div>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-data"><b>No Completed Campaigns</b></div>
+                        {% endif %}
+                        <form id="completed-campaign-form" method="POST" action="/campaign/cc" hidden>
+                            {% csrf_token %}
+                            <input class="cc-form-data" name="cdata"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="col-6 text-center">
+                <div class="running-campaigns">
+                    <div id="running-campaigns-table" class="running-campaigns-table">
+                        {% if running_campaign_data.values.count > 0 %}
+                            {% for d in running_campaign_data.values %}
+                                <div class="running-campaign {{ d.campId }}">
+                                    <div class="campaign-name"><b class="name">{{ d.campaignName }}</b></div>
+                                    <div class="campaign-created-on">
+                                        <p class="created-date">{{ d.modified_on|date }}</p>
+                                        <p class="created-time">{{ d.modified_on|time }}</p>
+                                    </div>
+                                    <div class="spinner-grow text-primary campaign-status" role="status" data-toggle="tooltip" data-placement="top" title="Running">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                    <div class="campaign-details-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="More Details"><ion-icon name="document-text-outline"></ion-icon></a></div>
+                                    <div class="campaign-complete-btn"><a class="options" onclick="completeCampaign(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Complete"><ion-icon name="checkmark-outline"></ion-icon></a></div>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-data"><b>No Running Campaigns</b></div>
+                        {% endif %}
+                        <form id="running-campaign-form" method="POST" action="/campaign/rc" hidden>
+                            {% csrf_token %}
+                            <input class="rc-form-data" name="rdata"/>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="scheduled-campaigns">
+                    <div id="scheduled-campaigns-table" class="scheduled-campaigns-table">
+                        {% if scheduled_campaign_data.values.count > 0 %}
+                            {% for d in scheduled_campaign_data.values %}
+                                <div class="scheduled-campaign {{ d.campId }}">
+                                    <div class="campaign-name"><b class="name">{{ d.campaignName }}</b></div>
+                                    <div class="campaign-created-on">
+                                        <p class="created-date">{{ d.modified_on|date }}</p>
+                                        <p class="created-time">{{ d.modified_on|time }}</p>
+                                    </div>
+                                    <div class="campaign-status" data-toggle="tooltip" data-placement="top" title="Scheduled"><ion-icon name="time"></ion-icon></ion-icon></div>
+                                    <div class="campaign-details-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="More Details"><ion-icon name="document-text-outline"></ion-icon></a></div>
+                                    <div class="campaign-runnow-btn"><a class="options" onclick="editUser(this.parentElement);" data-toggle="tooltip" data-placement="top" title="Run Now"><ion-icon name="play-skip-forward-outline"></ion-icon></ion-icon></a></div>
+                                </div>
+                                <hr>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-data"><b>No Scheduled Campaigns</b></div>
+                        {% endif %}
+                        <form id="running-campaign-form" method="POST" action="/campaign/sc" hidden>
+                            {% csrf_token %}
+                            <input class="sc-form-data" name="sdata"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <button class="btn add campaign" onclick="$('#configurations').modal();">+&nbsp; Campaign</button>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="configurations" tabindex="-1" role="dialog" aria-labelledby="configurations-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="configurations-title">Choose Configurations</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal();">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <form id="campaign-form-new" method="POST" action="/campaign/addcampaign">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="campname">Campaign Name</label>
-                        <input class="form-control" type="text" id="campname" name="campname" placeholder="Name for the Campaign">
+                    <div class="campaign-name form-group">
+                        <label for="campname">Campaign Name:</label>
+                        <input type="text" id="new-name" class="name form-control" name="campname" placeholder="Campaign name" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="emailtemp">Email Template</label>
-                            <select class="form-control" id="emailtemp" name="emailtemp">
-                                {% for emailt in emailtemp %}
-                                    <option>{{emailt.tempName}}</option>
-                                {% endfor %}
-                            </select>
+                    <div class="campaign-et form-group">
+                        <label for="emailtemp">Email Template:</label>
+                        <select class="form-control" id="new-emailtemp" name="emailtemp">
+                            {% for emailt in emailtemp %}
+                                <option>{{emailt.tempName}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="landpage">Landing Page</label>
-                            <select class="form-control" id="landpage" name="landpage">
-                                {% for land in landing %}
-                                    <option>{{land.name}}</option>
-                                {% endfor %}
-                            </select>
+                    <div class="campaign-lp form-group">
+                        <label for="landpage">Landing Page:</label>
+                        <select class="form-control" id="new-landpage" name="landpage">
+                            {% for land in landing %}
+                                <option>{{land.name}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="sendprofile">Sending Profile</label>
-                            <select class="form-control" id="sendprofile" name="sendprofile">
-                                {% for send in sending %}
-                                    <option>{{send.name}}</option>
-                                {% endfor %}
-                            </select>
+                    <div class="campaign-sp form-group">
+                        <label for="sendprofile">Sending Profile:</label>
+                        <select class="form-control" id="new-sendprofile" name="sendprofile">
+                            {% for send in sending %}
+                                <option>{{send.name}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label for="group">Group</label>
-                            <select class="form-control" id="group" name="group">
-                                {% for group in group_data %}
-                                    <option>{{group.groupName}}</option>
-                                {% endfor %}
-                            </select>
+                    <div class="campaign-grp form-group">
+                        <label for="group">Group:</label>
+                        <select class="form-control" id="new-group" name="group">
+                            {% for group in group_data %}
+                                <option>{{group.groupName}}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-                    <button type="submit" class="btn btn-success">Submit</button>
                 </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary campaign-schedule" onclick="scheduleCampaign();"><ion-icon name="time-outline"></ion-icon> Schedule</button>
+                <button type="button" class="btn btn-secondary campaign-close" data-dismiss="modal" onclick="$('#new-name').val('');">Cancel</button>
+                <button type="button" class="btn btn-primary campaign-run" onclick="runCampaign();"><ion-icon name="play-outline"></ion-icon> Run</button>
+            </div>
+          </div>
         </div>
     </div>
 {% endblock %}

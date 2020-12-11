@@ -25,6 +25,7 @@ class Campaign(TimeStampMixin):
     landingPage = models.IntegerField()
     sendingProfile = models.IntegerField()
     group = models.IntegerField()
+    campaignStatus = models.CharField(max_length=50, default="Created")
     users = models.ManyToManyField(Targets, through='CampaignResults')
     userId = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
 

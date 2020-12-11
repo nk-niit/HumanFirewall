@@ -28,6 +28,8 @@ urlpatterns = [
     path('dashboard',views.dashboard, name="dashboard"),
     
     path('campaign',views.campaign, name="campaign"),
+    path('campaign/addcampaign', views.addCampaign, name="addcampaign"),
+    path('campaign/rc/complete', views.completeCampaign, name="completecampaign"),
 
     path('usergroups',views.usergroups,name="usergroups"),
     path('usergroups/adduser', views.addUser, name="adduser"),
@@ -42,6 +44,7 @@ urlpatterns = [
     path('usergroups/getusers/<int:gid>', views.getUsersE, name="getusersE"),
     
     path('emailtemp',views.emailtemp,name="emailtemp"),
+    path('emailtemp/addtemplate', views.addTemplate, name="addtemplate"),
     
     path('sendingprofile',views.sendingprofile,name="sendingprofile"),
     path('sendingprofile/addprofile', views.addProfile, name="addprofile"),

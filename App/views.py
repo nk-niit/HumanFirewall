@@ -14,7 +14,24 @@ import json, uuid, os
 def dashboard(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard","data": CampaignResults.objects.all() })
+        data = []
+        campaign_obj = Campaign.objects.filter(campaignStatus="Running", userId=id)
+        for obj in campaign_obj:
+            ug_obj = UserGroups.objects.get(groupId=obj.group)
+            no_email_opened = CampaignResults.objects.filter(campaign_id=obj.campId, userEmailStatus=True).count()
+            no_user_click = CampaignResults.objects.filter(campaign_id=obj.campId, userClickStatus=True).count()
+            no_captured_creds = CampaignResults.objects.filter(campaign_id=obj.campId, userCredStatus=True).count()
+            p1 = (no_email_opened/ug_obj.totalUsers) * 100
+            p2 = (no_user_click/ug_obj.totalUsers) * 100
+            p3 = (no_captured_creds/ug_obj.totalUsers) * 100
+            c = [obj.campaignName, obj.campaignStatus, ug_obj.totalUsers, p1, p2, p3]
+            campresult = CampaignResults.objects.filter(campaign=obj.campId)
+            for cr in campresult:
+                a = Targets.objects.get(id=cr.user_id)
+                tmplist = [a.firstName,a.email,cr.userEmailStatus,cr.userClickStatus,cr.userCredStatus]
+                c.append(tmplist)
+            data.append(c)
+        return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard", "data": data })
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -67,6 +84,15 @@ def servepage(request, fname, trackid):
 def campaign(request):
     if request.session.has_key('id'):
         id = request.session['id']
+        return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id), "completed_campaign_data": Campaign.objects.filter(campaignStatus="Complete", userId=id), "running_campaign_data": Campaign.objects.filter(campaignStatus="Running", userId=id), "scheduled_campaign_data": Campaign.objects.filter(campaignStatus="Scheduled", userId=id) })
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def addCampaign(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
         if (request.method == "POST"):
             campaign_name = request.POST['campname']
             email_template = request.POST['emailtemp']
@@ -90,11 +116,26 @@ def campaign(request):
             campaign_obj.landingPage = objl.id
             campaign_obj.sendingProfile = objs.id
             campaign_obj.group = objug.groupId
+            campaign_obj.campaignStatus = "Running"
             campaign_obj.userId_id = id
             campaign_obj.save()
             runcampaign(targetsemail, profile, emaildata, campaign_name, objl.filename)
             return render(request, "dashboard.html", context={"title": "Campaigns - Human Firewall", "header": "Dashboard"})
-        return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id) })
+        return redirect("/campaign")
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def completeCampaign(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        if request.method == "POST":
+            record = Campaign.objects.get(campId=request.POST['rdata'])
+            record.campaignStatus = "Complete"
+            record.save()
+            return render(request, "campaign.html", context={"title": "Campaigns - Human Firewall", "emailtemp":EmailTemp.objects.filter(userId_id=id),"landing":LandingPage.objects.filter(userId_id=id),"sending":SendingProfile.objects.filter(userId_id=id) ,"header": "Campaigns","group_data": UserGroups.objects.filter(userId=id), "completed_campaign_data": Campaign.objects.filter(campaignStatus="Complete", userId=id), "running_campaign_data": Campaign.objects.filter(campaignStatus="Running", userId=id), "scheduled_campaign_data": Campaign.objects.filter(campaignStatus="Scheduled", userId=id) })
+        return redirect("/campaign")
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
@@ -308,16 +349,24 @@ def deleteGroup(request):
 def emailtemp(request):
     if request.session.has_key('id'):
         id = request.session['id']
-        if (request.method=="GET"):
-            return render(request, "emailtemp.html", context = { "title": "Email Templates - Human Firewall", "header": "Email Templates" })
-        elif(request.method=="POST"):
+        return render(request, "emailtemp.html", context = { "title": "Email Templates - Human Firewall", "header": "Email Templates", "data": EmailTemp.objects.filter(userId=id) })
+    else:
+        messages.info(request, 'Kindly Login To Continue')
+        return redirect("login")
+
+
+def addTemplate(request):
+    if request.session.has_key('id'):
+        id = request.session['id']
+        if request.method == "POST":
             obj = EmailTemp()
-            obj.tempName=request.POST['tempname']
-            obj.subject = request.POST['subject']
-            obj.text_html = request.POST['emailtext']
+            obj.tempName = request.POST['templatename']
+            obj.subject = request.POST['templatesubject']
+            obj.text_html = request.POST['templatecontent']
             obj.userId_id = id
             obj.save()
-            return redirect('/emailtemp')
+            return render(request, "emailtemp.html", context = { "title": "Email Templates - Human Firewall", "header": "Email Templates", "data": EmailTemp.objects.filter(userId=id) })
+        return redirect("/emailtemp")
     else:
         messages.info(request, 'Kindly Login To Continue')
         return redirect("login")
