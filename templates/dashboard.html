@@ -2,46 +2,83 @@
 {% block content %}
 
     <div class="container-fluid content">
-        {% for d in data %}
-            <div class="row graphical-details">
-                <div class="col-12 campaign-header">
-                    <b class="title">{{ d.0 }}: Statistics</b>
-                    <i class="status">({{ d.1 }})</i>
+        <div class="rc-dashboard">
+        {% if data %}
+            {% for d in data %}
+                <div class="container-fluid rc-graphical-details">
+                    <div id="rc-header-row {{ d.0 }}" class="row">
+                        <div class="col-12 rc-header">
+                            <b class="title">{{ d.1 }}</b>
+                            <i class="status">({{ d.2 }})</i>
+                            <button type="button" class="btn btn-primary expand" onclick="toggleRunningCampaignDetails(this, '{{ d.0 }}');">+ Expand</button>
+                            <button type="button" class="btn btn-primary complete" onclick="completeCampaign(this.parentElement, false);"><ion-icon name="checkmark-outline"></ion-icon> Complete</button>
+                        </div>
+                    </div>
+                    <div id="rc-stats-row {{ d.0 }}" class="row">
+                        <div class="col-3 rc-stats text-center">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuemin="0" aria-valuemax="100">{{ d.3 }}</div>
+                            </div>
+                            <div class="progress-bar-header">
+                                <span><ion-icon name="people-outline"></ion-icon> <b>Total Users</b></span>
+                            </div>
+                        </div>
+                        <div class="col-3 rc-stats text-center">
+                            <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ d.4 }}%" aria-valuemin="0" aria-valuemax="100">{{ d.4 }}%</div>
+                            </div>
+                            <div class="progress-bar-header">
+                                <span><ion-icon name="mail-outline"></ion-icon> <b>Total Emails Opened</b></span>
+                            </div>
+                        </div>
+                        <div class="col-3 rc-stats text-center">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ d.5 }}%" aria-valuemin="0" aria-valuemax="100">{{ d.5 }}%</div>
+                            </div>
+                            <div class="progress-bar-header">
+                                <span><ion-icon name="link-outline"></ion-icon> <b>Total Links Opened</b></span>
+                            </div>
+                        </div>
+                        <div class="col-3 rc-stats text-center">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{ d.6 }}%" aria-valuemin="0" aria-valuemax="100">{{ d.6 }}%</div>
+                            </div>
+                            <div class="progress-bar-header">
+                                <span><ion-icon name="key-outline"></ion-icon> <b>Total Credentials Captured</b></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="rc-user-details-row {{ d.0 }}" class="row" hidden>
+                        <div class="col-12 rc-user-details">
+                            <table>
+                                <tr>
+                                    <th>Fullname</th>
+                                    <th>Email</th>
+                                    <th>Email Opened</th>
+                                    <th>Link Opened</th>
+                                    <th>Credentials Captured</th>
+                                </tr>
+                                {% for u in d.7 %}
+                                    <tr>
+                                        <td>{{ u.0 }}</td>
+                                        <td><i>{{ u.1 }}</i></td>
+                                        <td>{{ u.2 }}</td>
+                                        <td>{{ u.3 }}</td>
+                                        <td>{{ u.4 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-3 text-center campaign-stats total-users">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuemin="0" aria-valuemax="100">{{ d.2 }}</div>
-                    </div>
-                    <div class="progress-bar-header">
-                        <span><ion-icon name="people-outline"></ion-icon> <b>Total Users</b></span>
-                    </div>
-                </div>
-                <div class="col-3 text-center campaign-stats total-email-opened">
-                    <div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: {{ d.3 }}%" aria-valuemin="0" aria-valuemax="100">{{ d.3 }}%</div>
-                    </div>
-                    <div class="progress-bar-header">
-                        <span><ion-icon name="mail-outline"></ion-icon> <b>Total Emails Opened</b></span>
-                    </div>
-                </div>
-                <div class="col-3 text-center campaign-stats total-links-opened">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ d.4 }}%" aria-valuemin="0" aria-valuemax="100">{{ d.4 }}%</div>
-                    </div>
-                    <div class="progress-bar-header">
-                        <span><ion-icon name="link-outline"></ion-icon> <b>Total Links Opened</b></span>
-                    </div>
-                </div>
-                <div class="col-3 text-center campaign-stats total-creds-captured">
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: {{ d.5 }}%" aria-valuemin="0" aria-valuemax="100">{{ d.5 }}%</div>
-                    </div>
-                    <div class="progress-bar-header">
-                        <span><ion-icon name="key-outline"></ion-icon> <b>Total Credentials Captured</b></span>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+            <form id="running-campaign-form" method="POST" action="/campaign/rc" hidden>
+                {% csrf_token %}
+                <input class="rc-form-data" name="rdata"/>
+            </form>
+        {% endif %}
+        </div>
+        <hr>
     </div>
 
 {% endblock %}

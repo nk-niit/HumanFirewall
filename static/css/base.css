@@ -880,44 +880,92 @@ img {
 .modal-footer .btn.btn-secondary.campaign-schedule ion-icon, .modal-footer .btn.btn-primary.campaign-run ion-icon {
     font-size: 15px;
 }
-.graphical-details {
-    position: relative;
-    height: 150px;
+.rc-dashboard {
+    display: block;
+    padding: 0 10px;
+    height: 500px;
+    width: 100%;
+    overflow: auto;
+}
+.rc-graphical-details {
     border-radius: 5px;
     box-shadow: 0 0 6px 8px rgba(0, 0, 0, 0.07);
     margin: 20px 0;
+    padding-top: 10px;
 }
-.graphical-details .campaign-header {
-    left: 15px;
-    top: 15px;
+.rc-graphical-details .row {
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
 }
-.graphical-details .campaign-stats {
-    margin-top: 5px;
-}
-.graphical-details .campaign-stats .progress {
-    margin: 10px 15px;
-    height: 30%;
-}
-.graphical-details .campaign-header .title {
+.rc-graphical-details .row .rc-header .title {
     font-size: 20px;
     font-family: 'Poppins', sans-serif;
     border-bottom: 1px solid;
 }
-.graphical-details .campaign-header .status {
+.rc-graphical-details .row .rc-header .status {
     margin-left: 10px;
     font-size: 15px;
     font-family: 'Poppins', sans-serif;
     color: green;
 }
-.graphical-details .campaign-stats .progress-bar-header ion-icon {
+.rc-graphical-details .row .rc-header .expand {
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    right: 2%;
+    background-color: #fff;
+    color: #0C5DF4;
+    border: none;
+}
+.rc-graphical-details .row .rc-header .complete {
+    position: absolute;
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px;
+    right: 12%;
+    background-color: #fff;
+    color: #0C5DF4;
+    border: none;
+}
+.rc-graphical-details .row .rc-header .expand:focus, .rc-graphical-details .row .rc-header .complete:focus {
+    background-color: #fff;
+    box-shadow: none;
+}
+.rc-graphical-details .row .rc-header .complete ion-icon {
+    position: relative;
+    top: 2px;
+}
+.rc-graphical-details .row .rc-stats {
+    margin: 10px auto;
+}
+.rc-graphical-details .row .rc-stats .progress {
+    margin: 5px 10px;
+    height: 30px;
+}
+.rc-graphical-details .row .rc-stats .progress-bar-header ion-icon {
     position: relative;
     top: 5px;
     font-size: 20px;
 }
-.graphical-details .campaign-stats .progress-bar-header b {
+.rc-graphical-details .row .rc-stats .progress-bar-header b {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
 }
+.rc-graphical-details .row .rc-user-details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px auto;
+}
+.rc-graphical-details .row .rc-user-details table th, .rc-graphical-details .row .rc-user-details table td {
+    font-family: 'Roboto', sans-serif;
+    border: 1px solid #dddddd;
+    font-size: 15px;
+    padding: 5px;
+}
+.rc-graphical-details .row .rc-user-details table tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
 
 
 #user-table hr {

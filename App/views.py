@@ -24,12 +24,15 @@ def dashboard(request):
             p1 = (no_email_opened/ug_obj.totalUsers) * 100
             p2 = (no_user_click/ug_obj.totalUsers) * 100
             p3 = (no_captured_creds/ug_obj.totalUsers) * 100
-            c = [obj.campaignName, obj.campaignStatus, ug_obj.totalUsers, p1, p2, p3]
+            c = [obj.campId, obj.campaignName, obj.campaignStatus, ug_obj.totalUsers, p1, p2, p3]
             campresult = CampaignResults.objects.filter(campaign=obj.campId)
+            users = []
             for cr in campresult:
                 a = Targets.objects.get(id=cr.user_id)
-                tmplist = [a.firstName,a.email,cr.userEmailStatus,cr.userClickStatus,cr.userCredStatus]
-                c.append(tmplist)
+                fullname = a.firstName + " " + a.lastName
+                user = [fullname,a.email,cr.userEmailStatus,cr.userClickStatus,cr.userCredStatus]
+                users.append(user)
+            c.append(users)
             data.append(c)
         return render(request, "dashboard.html", context={ "title": "Dashboard - Human Firewall", "header": "Dashboard", "data": data })
     else:
@@ -580,7 +583,7 @@ def user_check(request):
         userId = u.id
         request.session['id'] = userId
         request.session['username'] = user
-        return redirect("dashboard")
+        return redirect("/dashboard")
     else:
         messages.info(request, 'Invalid Credentials')
         return redirect("login")

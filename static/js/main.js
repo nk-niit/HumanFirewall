@@ -771,6 +771,27 @@ function cancelAddTemplateForm() {
 
 
 
+async function completeCampaign(element, from) {
+    $('[data-toggle="tooltip"]').tooltip("hide");
+    const flag = confirm("You are about to mark this campaign as complete. All the processes will be stopped. Please confirm your action.");
+    if (flag) {
+        const current_running_campaign = element.parentElement;
+        let cid;
+        if (from) {
+            cid = current_running_campaign.className.split(" ")[1];
+        }
+        else {
+            cid = current_running_campaign.id.split(" ")[1];
+        }
+        const form = document.getElementById('running-campaign-form');
+        $('#running-campaign-form .rc-form-data').val(cid);
+        form.action += "/complete";
+        form.submit();
+    }
+}
+
+
+
 // Campaigns (Start) ===============================================================================================================
 function runCampaign() {
     const campaign_name = $('#new-name').val();
@@ -791,23 +812,20 @@ function runCampaign() {
     }
 }
 
-async function completeCampaign(element) {
-    $('[data-toggle="tooltip"]').tooltip("hide");
-    const flag = confirm("You are about to mark this campaign as complete. All the processes will be stopped. Please confirm your action.");
-    if (flag) {
-        const current_running_campaign = element.parentElement;
-        const cid = current_running_campaign.className.split(" ")[1];
-        const form = document.getElementById('running-campaign-form');
-        $('#running-campaign-form .rc-form-data').val(cid);
-        form.action += "/complete";
-        form.submit();
-    }
-}
 // Campaigns (End) =================================================================================================================
 
 
 
 // Dashboard (Start) ===============================================================================================================
-
+function toggleRunningCampaignDetails(button, id) {
+    if (button.innerHTML.includes("Expand")) {
+        document.getElementById(`rc-user-details-row ${id}`).hidden = false;
+        button.innerHTML = "- Minimize";
+    }
+    else {
+        document.getElementById(`rc-user-details-row ${id}`).hidden = true;
+        button.innerHTML = "+ Expand";
+    }
+}
 
 // Dashboard (End) =================================================================================================================
